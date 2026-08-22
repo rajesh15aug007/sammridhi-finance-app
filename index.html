@@ -112,7 +112,15 @@ function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x)S={...S,.
 function money(n){return "₹"+Number(n||0).toLocaleString("en-IN")}
 function toast(t){const x=document.getElementById("toast");x.textContent=t;x.style.display="block";setTimeout(()=>x.style.display="none",1800)}
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function startTrial(){S.user=trialName.value.trim()||"Trial User";save();document.getElementById("login").style.display="none";document.getElementById("app").style.display="flex";user.textContent=S.user;render()}
+function startTrial(){
+  const name=document.getElementById("trialName").value.trim()||"Trial User";
+  S.user=name;
+  save();
+  document.getElementById("login").style.display="none";
+  document.getElementById("app").style.display="flex";
+  document.getElementById("user").textContent=S.user;
+  render();
+}
 function show(id,btn){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");heading.textContent=id==="documents"?"KYC / Documents":id==="reports"?"MIS Reports":id==="workflow"?"Application Workflow":id[0].toUpperCase()+id.slice(1);render()}
 function openModal(id){fillSelects();document.getElementById(id).classList.add("show")}
 function closeModals(){document.querySelectorAll(".modal").forEach(x=>x.classList.remove("show"))}
