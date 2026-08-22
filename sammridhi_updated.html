@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sammridhi Finance — Final Trial</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f4f7fb;color:#14213d}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.login{min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#06265a,#0b65d8)}.loginbox{background:#fff;width:min(430px,92vw);padding:30px;border-radius:18px;box-shadow:0 20px 60px #0003}.brand{color:#092d68;font-size:25px;font-weight:800}.gold{color:#c79a2b}.field{margin:10px 0}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid #d5ddea;border-radius:9px;background:#fff}.primary{background:#0b5ed7;color:#fff;border:0;border-radius:9px;padding:11px 16px;font-weight:700}.secondary{background:#eef4ff;color:#0b5ed7;border:0;border-radius:9px;padding:10px 14px;font-weight:700}.app{display:none;min-height:100vh}.side{position:fixed;left:0;top:0;bottom:0;width:245px;background:#082b63;color:#fff;padding:20px 14px;z-index:2}.side .brand{color:#fff;margin:0 10px 25px}.nav{width:100%;padding:11px;border:0;background:transparent;color:#dce8ff;text-align:left;border-radius:8px;margin:2px 0}.nav:hover,.nav.active{background:#ffffff18;color:#fff}.main{margin-left:245px;padding:25px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.view{display:none}.view.active{display:block}.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:18px 0}.card{background:#fff;border:1px solid #e3e8f0;border-radius:13px;padding:16px}.label{font-size:12px;color:#65738a}.num{font-size:24px;font-weight:800;margin-top:6px}.panel{background:#fff;border:1px solid #e3e8f0;border-radius:13px;padding:18px;margin-top:14px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.toolbar input{padding:10px;border:1px solid #d5ddea;border-radius:8px}.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse}th,td{padding:10px 8px;border-bottom:1px solid #edf0f5;text-align:left;font-size:13px;white-space:nowrap}.badge{padding:4px 8px;border-radius:999px;background:#edf4ff;color:#0b5ed7;font-size:11px;font-weight:700}.empty{color:#718096;padding:25px;text-align:center}.toast{position:fixed;right:20px;bottom:20px;background:#14213d;color:#fff;padding:12px 16px;border-radius:10px;display:none;z-index:5}.trial{font-size:12px;color:#6a778d;margin-top:15px}.danger{color:#b42318}.footer{font-size:11px;color:#8290a4;margin-top:25px}@media(max-width:1000px){.cards{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.side{width:62px;padding:10px}.side .brand{font-size:0}.side .brand:after{content:"S";font-size:24px}.nav{font-size:0;text-align:center}.nav:before{content:"•";font-size:20px}.main{margin-left:62px;padding:14px}.cards{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.top h1{font-size:20px}}
+.stagebar{display:flex;gap:6px;overflow:auto;padding:8px 0;margin:10px 0}
+.stage{min-width:125px;padding:9px 10px;border-radius:9px;background:#eef4ff;color:#31577f;font-size:11px;font-weight:700;text-align:center}
+.stage.done{background:#dff5e8;color:#167044}.stage.current{background:#0b5ed7;color:#fff}
+.workflow-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.small{font-size:11px;color:#718096}.success{color:#167044;font-weight:700}.warn{color:#9a6700;font-weight:700}
+.timeline{border-left:3px solid #dce8ff;padding-left:14px;margin:10px 0}
+.timeline div{margin:8px 0}.otpbox{background:#f7faff;border:1px dashed #9bb9e8;padding:12px;border-radius:10px;margin-top:10px}
+.tranche{border:1px solid #e3e8f0;border-radius:10px;padding:12px;margin:8px 0;background:#fbfcfe}
+@media(max-width:1000px){.cards{grid-template-columns:repeat(3,1fr)}}<body>
+<div id="login" class="login"><div class="loginbox">
+<div class="brand">Sammridhi <span class="gold">Finance</span></div><h2>Final Trial</h2>
+<p>Try the complete DSA & loan-management workflow in your browser.</p>
+<div class="field"><label>Your name</label><input id="trialName" placeholder="e.g. Rajesh Kumar"></div>
+<button class="primary" style="width:100%" onclick="startTrial()">Start Trial</button>
+<div class="trial">Demo data is stored only in this browser. No real customer/KYC data should be entered into this trial.</div>
+</div></div>
+<div id="app" class="app">
+<aside class="side"><div class="brand">Sammridhi Finance</div>
+<button class="nav active" onclick="show('dashboard',this)">Dashboard</button><button class="nav" onclick="show('leads',this)">Leads</button><button class="nav" onclick="show('applications',this)">Applications</button><button class="nav" onclick="show('workflow',this)">Workflow</button><button class="nav" onclick="show('connectors',this)">Connectors</button><button class="nav" onclick="show('lenders',this)">Lenders</button><button class="nav" onclick="show('documents',this)">KYC / Documents</button><button class="nav" onclick="show('followups',this)">Follow-ups</button><button class="nav" onclick="show('reports',this)">MIS Reports</button><button class="nav" onclick="show('team',this)">Team</button><button class="nav" onclick="show('settings',this)">Settings</button></aside>
+<main class="main"><div class="top"><div><h1 id="heading">Dashboard</h1><div class="trial">Final Trial Mode • <span id="user"></span></div></div><button class="secondary" onclick="resetTrial()">Reset Trial</button></div>
+
+<section id="dashboard" class="view active"><div class="cards">
+<div class="card"><div class="label">Total Leads</div><div class="num" id="kLeads">0</div></div><div class="card"><div class="label">Open</div><div class="num" id="kOpen">0</div></div><div class="card"><div class="label">Sanctioned</div><div class="num" id="kSan">0</div></div><div class="card"><div class="label">Disbursed</div><div class="num" id="kDis">0</div></div><div class="card"><div class="label">Loan Volume</div><div class="num" id="kVol">₹0</div></div><div class="card"><div class="label">Commission</div><div class="num" id="kCom">₹0</div></div></div>
+<div class="panel"><h3>Quick Start</h3><p>Create a lead, assign a lender/connector, move it through application → sanction → disbursement, then review MIS and commission.</p><button class="primary" onclick="show('leads',document.querySelectorAll('.nav')[1])">Open Lead Pipeline</button></div></section>
+
+<section id="leads" class="view"><div class="panel"><h3>Lead Pipeline</h3><div class="toolbar"><input id="searchLead" placeholder="Search customer/mobile/product" oninput="render()"><button class="primary" onclick="openModal('leadModal')">+ New Lead</button></div><div class="tablewrap"><table><thead><tr><th>ID</th><th>Customer</th><th>Product</th><th>Lender</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead><tbody id="leadRows"></tbody></table></div></div></section>
+
+<section id="applications" class="view"><div class="panel">
+<h3>Loan Applications & Workflow</h3>
+<div class="toolbar"><button class="primary" onclick="openModal('appModal')">+ New Application</button>
+<input id="searchApp" placeholder="Search application/customer" oninput="render()"></div>
+<div class="tablewrap"><table><thead><tr><th>App No.</th><th>Customer</th><th>Lender</th><th>Amount</th><th>Stage</th><th>Tranches</th><th>Action</th></tr></thead><tbody id="appRows"></tbody></table></div>
+</div></section>
+
+<section id="workflow" class="view"><div class="panel">
+<h3 id="wfTitle">Application Workflow</h3>
+<div id="workflowContent"></div>
+</div></section>
+
+<section id="connectors" class="view"><div class="panel"><h3>Connector / DSA Master</h3><button class="primary" onclick="openModal('connectorModal')">+ Add Connector</button><div class="tablewrap"><table><thead><tr><th>Name</th><th>Mobile</th><th>Rate</th><th>Leads</th><th>Payable</th></tr></thead><tbody id="connectorRows"></tbody></table></div></div></section>
+<section id="lenders" class="view"><div class="panel"><h3>Lender / NBFC Master</h3><button class="primary" onclick="openModal('lenderModal')">+ Add Lender</button><div class="tablewrap"><table><thead><tr><th>Name</th><th>Type</th><th>Active</th></tr></thead><tbody id="lenderRows"></tbody></table></div></div></section>
+
+<section id="documents" class="view"><div class="panel"><h3>KYC / Documents</h3><p>Trial mode records document names/status only. Production version should use encrypted object storage.</p><button class="primary" onclick="openModal('docModal')">+ Add Document Record</button><div class="tablewrap"><table><thead><tr><th>Lead</th><th>Document</th><th>Status</th><th>Uploaded</th></tr></thead><tbody id="docRows"></tbody></table></div></div></section>
+
+<section id="followups" class="view"><div class="panel"><h3>Follow-ups</h3><button class="primary" onclick="openModal('followModal')">+ Add Follow-up</button><div class="tablewrap"><table><thead><tr><th>Customer</th><th>Date</th><th>Type</th><th>Notes</th><th>Status</th></tr></thead><tbody id="followRows"></tbody></table></div></div></section>
+
+<section id="reports" class="view"><div class="panel"><h3>MIS Reports</h3><button class="secondary" onclick="exportCSV()">Export Leads CSV</button><div class="tablewrap"><table><thead><tr><th>Status</th><th>Leads</th><th>Volume</th><th>Commission</th></tr></thead><tbody id="reportRows"></tbody></table></div></div></section>
+
+<section id="team" class="view"><div class="panel"><h3>Team</h3><button class="primary" onclick="openModal('teamModal')">+ Add Employee</button><div class="tablewrap"><table><thead><tr><th>Name</th><th>Role</th><th>Mobile</th><th>Target</th></tr></thead><tbody id="teamRows"></tbody></table></div></div></section>
+
+<section id="settings" class="view"><div class="panel"><h3>Trial Settings</h3><p>This browser trial is intentionally self-contained. Data can be reset at any time.</p><p><b>Production deployment:</b> PostgreSQL, secure authentication, encrypted KYC storage, backups, HTTPS, MFA and notification integrations are required before live customer data is used.</p></div></section>
+<div class="footer">Sammridhi Finance • Final Trial Build • Demo only</div></main></div>
+
+<div id="leadModal" class="modal"><div class="modalbox"><h3>New Lead</h3><div class="grid"><div class="field"><label>Customer</label><input id="lc"></div><div class="field"><label>Mobile</label><input id="lm"></div><div class="field"><label>Product</label><input id="lp" placeholder="Commercial Vehicle Loan"></div><div class="field"><label>Amount</label><input id="la" type="number"></div><div class="field"><label>Lender</label><select id="ll"></select></div><div class="field"><label>Connector</label><select id="lcx"></select></div></div><button class="primary" onclick="addLead()">Create</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+<button class="primary" onclick="addApp()">Create</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+<div id="connectorModal" class="modal"><div class="modalbox"><h3>Add Connector</h3><div class="grid"><div class="field"><label>Name</label><input id="cn"></div><div class="field"><label>Mobile</label><input id="cm"></div><div class="field"><label>Commission %</label><input id="cr" type="number" step=".01"></div></div><button class="primary" onclick="addConnector()">Add</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+<div id="lenderModal" class="modal"><div class="modalbox"><h3>Add Lender</h3><div class="grid"><div class="field"><label>Name</label><input id="ln"></div><div class="field"><label>Type</label><select id="lt"><option>Bank</option><option>NBFC</option></select></div></div><button class="primary" onclick="addLender()">Add</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+<div id="docModal" class="modal"><div class="modalbox"><h3>Document Record</h3><div class="grid"><div class="field"><label>Lead</label><select id="dl"></select></div><div class="field"><label>Document</label><select id="dd"><option>Aadhaar</option><option>PAN</option><option>Bank Statement</option><option>Income Proof</option><option>RC</option><option>Insurance</option><option>Sanction Letter</option></select></div><div class="field"><label>Status</label><select id="ds"><option>Pending</option><option>Received</option><option>Verified</option></select></div></div><button class="primary" onclick="addDoc()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+<div id="followModal" class="modal"><div class="modalbox"><h3>Add Follow-up</h3><div class="grid"><div class="field"><label>Lead</label><select id="fl"></select></div><div class="field"><label>Date</label><input id="fd" type="date"></div><div class="field"><label>Type</label><select id="ft"><option>Call</option><option>WhatsApp</option><option>Visit</option><option>Email</option></select></div><div class="field"><label>Notes</label><input id="fn"></div></div><button class="primary" onclick="addFollow()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+<div id="teamModal" class="modal"><div class="modalbox"><h3>Add Employee</h3><div class="grid"><div class="field"><label>Name</label><input id="tn"></div><div class="field"><label>Role</label><select id="tr"><option>Employee</option><option>Manager</option></select></div><div class="field"><label>Mobile</label><input id="tm"></div><div class="field"><label>Monthly Target</label><input id="tt" type="number"></div></div><button class="primary" onclick="addTeam()">Add</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+<div id="appModal" class="modal"><div class="modalbox"><h3>New Application</h3>
+<div class="grid"><div class="field"><label>Lead</label><select id="al"></select></div>
+<div class="field"><label>Application No.</label><input id="an" placeholder="e.g. SF-APP-001"></div>
+<div class="field"><label>Lender</label><select id="ale"></select></div>
+<div class="field"><label>Requested Amount</label><input id="asa" type="number"></div></div>
+<button class="primary" onclick="addApp()">Create</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+
+<div id="personModal" class="modal"><div class="modalbox"><h3>Add Applicant / Co-applicant / Guarantor</h3>
+<div class="grid"><div class="field"><label>Role</label><select id="pr"><option>Applicant</option><option>Co-applicant</option><option>Guarantor</option></select></div>
+<div class="field"><label>Name</label><input id="pn"></div><div class="field"><label>Mobile</label><input id="pm"></div>
+<div class="field"><label>PAN</label><input id="pp"></div></div>
+<button class="primary" onclick="addPerson()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+
+<div id="cibilModal" class="modal"><div class="modalbox"><h3>CIBIL Record</h3>
+<div class="grid"><div class="field"><label>Score</label><input id="cs" type="number" min="300" max="900"></div>
+<div class="field"><label>Report Status</label><select id="cst"><option>Requested</option><option>Received</option><option>Reviewed</option></select></div>
+<div class="field"><label>Remarks</label><input id="crm"></div></div>
+<button class="primary" onclick="saveCibil()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+
+<div id="otpModal" class="modal"><div class="modalbox"><h3 id="otpTitle">OTP Verification</h3>
+<p class="small">Trial mode: the OTP is simulated locally and is not a legal e-signature.</p>
+<div class="otpbox">Demo OTP: <b id="demoOtp"></b></div>
+<div class="field"><label>Enter OTP</label><input id="otpInput" inputmode="numeric" maxlength="6"></div>
+<button class="primary" onclick="verifyOtp()">Verify OTP</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+
+<div id="trancheModal" class="modal"><div class="modalbox"><h3>Add Disbursement Tranche</h3>
+<div class="grid"><div class="field"><label>Tranche</label><select id="trn"><option>1</option><option>2</option><option>3</option><option>4</option></select></div>
+<div class="field"><label>Amount</label><input id="tra" type="number"></div>
+<div class="field"><label>Date</label><input id="trd" type="date"></div>
+<div class="field"><label>Status</label><select id="trs"><option>Planned</option><option>Released</option><option>Hold</option></select></div></div>
+<button class="primary" onclick="addTranche()">Save Tranche</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+
+<div id="toast" class="toast"></div>
+<style>.modal{display:none;position:fixed;inset:0;background:#071a3388;z-index:4;place-items:center;padding:15px}.modal.show{display:grid}.modalbox{background:#fff;width:min(720px,95vw);max-height:90vh;overflow:auto;border-radius:15px;padding:20px}</style>
+<script>
+const KEY="sf_final_trial_v2";
+let S={
+ leads:[],apps:[],connectors:[],
+ lenders:[{id:1,name:"Tata Capital",type:"NBFC"},{id:2,name:"Mahindra Finance",type:"NBFC"},{id:3,name:"HDB Finance",type:"NBFC"},{id:4,name:"Axis Bank",type:"Bank"},{id:5,name:"IDFC First Bank",type:"Bank"}],
+ docs:[],follows:[],team:[],user:"",people:[],cibil:[],tranches:[],events:[]
+};
+let activeApp=null,otpPurpose=null;
+
+function save(){localStorage.setItem(KEY,JSON.stringify(S))}
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x)S={...S,...x}}catch(e){}}
+function money(n){return "₹"+Number(n||0).toLocaleString("en-IN")}
+function toast(t){const x=document.getElementById("toast");x.textContent=t;x.style.display="block";setTimeout(()=>x.style.display="none",1800)}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function startTrial(){S.user=trialName.value.trim()||"Trial User";save();document.getElementById("login").style.display="none";document.getElementById("app").style.display="flex";user.textContent=S.user;render()}
+function show(id,btn){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");heading.textContent=id==="documents"?"KYC / Documents":id==="reports"?"MIS Reports":id==="workflow"?"Application Workflow":id[0].toUpperCase()+id.slice(1);render()}
+function openModal(id){fillSelects();document.getElementById(id).classList.add("show")}
+function closeModals(){document.querySelectorAll(".modal").forEach(x=>x.classList.remove("show"))}
+function fillSelects(){
+ const lopts=S.lenders.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
+ if(document.getElementById("ll"))ll.innerHTML=lopts;
+ if(document.getElementById("ale"))ale.innerHTML=lopts;
+ const cop=S.connectors.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
+ if(document.getElementById("lcx"))lcx.innerHTML='<option value="">Direct</option>'+cop;
+ const leads=S.leads.map(x=>`<option value="${x.id}">${esc(x.id)} — ${esc(x.customer)}</option>`).join("");
+ ["al","dl","fl"].forEach(id=>{if(document.getElementById(id))document.getElementById(id).innerHTML=leads});
+}
+function addLead(){
+ if(!lc.value||!lm.value||!lp.value)return toast("Customer, mobile and product required");
+ S.leads.unshift({id:"SF-"+Date.now().toString().slice(-6),customer:lc.value,mobile:lm.value,product:lp.value,amount:Number(la.value||0),lender:+ll.value,connector:+lcx.value||null,status:"New",ourRate:2,connectorRate:S.connectors.find(x=>x.id==+lcx.value)?.rate||0,created:new Date().toISOString()});
+ save();closeModals();toast("Lead created");render()
+}
+function addApp(){
+ if(!al.value)return toast("Select a lead");
+ const id="APP-"+Date.now().toString().slice(-6);
+ S.apps.unshift({id,lead:al.value,no:an.value||id,lender:+ale.value,sanction:Number(asa.value||0),status:"Submitted",stage:1,created:new Date().toISOString()});
+ addEvent(id,"Application created");
+ save();closeModals();toast("Application created");render();openWorkflow(id)
+}
+function addConnector(){if(!cn.value)return toast("Name required");S.connectors.push({id:Date.now(),name:cn.value,mobile:cm.value,rate:Number(cr.value||0)});save();closeModals();toast("Connector added");render()}
+function addLender(){if(!ln.value)return toast("Name required");S.lenders.push({id:Date.now(),name:ln.value,type:lt.value});save();closeModals();toast("Lender added");render()}
+function addDoc(){if(!dl.value)return toast("Select a lead");S.docs.unshift({lead:dl.value,doc:dd.value,status:ds.value,date:new Date().toLocaleDateString("en-IN")});save();closeModals();toast("Document record saved");render()}
+function addFollow(){if(!fl.value)return toast("Select a lead");S.follows.unshift({lead:fl.value,date:fd.value||new Date().toISOString().slice(0,10),type:ft.value,note:fn.value,status:"Open"});save();closeModals();toast("Follow-up added");render()}
+function addTeam(){if(!tn.value)return toast("Name required");S.team.push({name:tn.value,role:tr.value,mobile:tm.value,target:Number(tt.value||0)});save();closeModals();toast("Employee added");render()}
+function lender(id){return S.lenders.find(x=>x.id==id)?.name||"-"}
+function connector(id){return S.connectors.find(x=>x.id==id)?.name||"Direct"}
+function addEvent(appId,text){S.events.unshift({appId,text,date:new Date().toLocaleString("en-IN")})}
+function getApp(id){return S.apps.find(x=>x.id===id)}
+function getLead(a){return S.leads.find(x=>x.id===a?.lead)}
+const stages=["Application","Applicants","KYC","CIBIL","Lender Login","Processing","Sanction","Legal & Agreement","Applicant OTP","Seller OTP","Disbursement","Completed"];
+
+function setStage(id,n){
+ const a=getApp(id);if(!a)return;
+ if(n>=11 && !(a.applicantOtp && a.sellerOtp))return toast("Complete Applicant + Seller OTP verification before disbursement");
+ a.stage=Math.max(1,Math.min(stages.length,n));a.status=stages[a.stage-1];
+ const l=getLead(a);if(l&&a.stage>=7&&a.stage<11)l.status="Sanctioned";
+ if(l&&a.stage>=11)l.status="Disbursed";
+ addEvent(id,"Moved to "+stages[a.stage-1]);save();render();openWorkflow(id)
+}
+function addPerson(){if(!pn.value)return toast("Name required");if(!activeApp)return;
+ S.people.push({id:Date.now(),appId:activeApp,role:pr.value,name:pn.value,mobile:pm.value,pan:pp.value});
+ addEvent(activeApp,pr.value+" added: "+pn.value);save();closeModals();toast("Person added");openWorkflow(activeApp)
+}
+function saveCibil(){if(!activeApp)return;S.cibil=S.cibil.filter(x=>x.appId!==activeApp);S.cibil.push({appId:activeApp,score:Number(cs.value||0),status:cst.value,remarks:crm.value,date:new Date().toLocaleDateString("en-IN")});addEvent(activeApp,"CIBIL updated");save();closeModals();toast("CIBIL saved");openWorkflow(activeApp)}
+function startOtp(purpose){
+ if(!activeApp)return;otpPurpose=purpose;document.getElementById("otpTitle").textContent=purpose+" OTP Verification";document.getElementById("demoOtp").textContent="123456";otpInput.value="";openModal("otpModal")
+}
+function verifyOtp(){
+ if(otpInput.value!=="123456")return toast("For trial use OTP 123456");
+ const a=getApp(activeApp);if(otpPurpose==="Applicant"){a.applicantOtp=true;setStage(activeApp,9)}
+ else if(otpPurpose==="Seller"){a.sellerOtp=true;setStage(activeApp,10)}
+ closeModals();toast(otpPurpose+" OTP verified")
+}
+function addTranche(){
+ if(!activeApp)return; const a0=getApp(activeApp); if(!(a0.applicantOtp && a0.sellerOtp))return toast("Both agreement OTPs must be verified first"); if(!tra.value)return toast("Enter amount");
+ const no=Number(trn.value);if(S.tranches.some(x=>x.appId===activeApp&&x.no===no))return toast("That tranche already exists");
+ S.tranches.push({appId:activeApp,no,amount:Number(tra.value),date:trd.value||new Date().toISOString().slice(0,10),status:trs.value});
+ const a=getApp(activeApp);a.disb=(S.tranches.filter(x=>x.appId===activeApp&&x.status==="Released").reduce((s,x)=>s+x.amount,0));
+ if(a.disb>0){a.stage=11;a.status="Disbursement";const l=getLead(a);if(l)l.status="Disbursed"}
+ addEvent(activeApp,"Tranche "+no+" saved");save();closeModals();toast("Tranche saved");openWorkflow(activeApp)
+}
+function releaseTranche(appId,no){
+ const a0=getApp(appId); if(!(a0?.applicantOtp && a0?.sellerOtp))return toast("Both agreement OTPs must be verified first");
+ const t=S.tranches.find(x=>x.appId===appId&&x.no===no);if(!t)return;t.status="Released";
+ const a=getApp(appId);a.disb=S.tranches.filter(x=>x.appId===appId&&x.status==="Released").reduce((s,x)=>s+x.amount,0);
+ addEvent(appId,"Tranche "+no+" released");save();render();openWorkflow(appId)
+}
+function statusChange(id){const x=S.leads.find(a=>a.id===id);const n=prompt("Enter status: New / Submitted / Sanctioned / Disbursed / Rejected",x.status);if(n){x.status=n;save();render();toast("Status updated")}}
+
+function openWorkflow(id){
+ activeApp=id;const a=getApp(id);if(!a)return;show("workflow",document.querySelectorAll(".nav")[4]);
+ const l=getLead(a)||{};const people=S.people.filter(x=>x.appId===id);const c=S.cibil.find(x=>x.appId===id);const ts=S.tranches.filter(x=>x.appId===id).sort((x,y)=>x.no-y.no);
+ const events=S.events.filter(x=>x.appId===id).slice(0,10);
+ const completed=i=>a.stage>i;
+ workflowContent.innerHTML=`
+ <div><b>${esc(a.no)}</b> • ${esc(l.customer||a.lead)} • ${esc(lender(a.lender))} • Requested ${money(l.amount)} • Sanction ${money(a.sanction)}</div>
+ <div class="stagebar">${stages.map((s,i)=>`<div class="stage ${completed(i+1)?"done":a.stage===i+1?"current":""}">${i+1}. ${s}</div>`).join("")}</div>
+ <div class="grid">
+  <div class="panel"><h4>Applicants</h4>${people.length?people.map(p=>`<div><b>${esc(p.role)}</b>: ${esc(p.name)}<br><span class="small">${esc(p.mobile||"")} ${p.pan?"• PAN "+esc(p.pan):""}</span></div>`).join(""):"<span class='empty'>None added</span>"}
+  <div class="workflow-actions"><button class="secondary" onclick="openModal('personModal')">+ Add Person</button></div></div>
+  <div class="panel"><h4>KYC / Documents</h4><div>${S.docs.filter(d=>d.lead===a.lead).map(d=>`<span class="badge">${esc(d.doc)}: ${esc(d.status)}</span> `).join("")||"No records"}</div><div class="workflow-actions"><button class="secondary" onclick="openModal('docModal')">+ Add Document</button></div></div>
+  <div class="panel"><h4>CIBIL</h4>${c?`<b>${c.score}</b> • ${esc(c.status)}<br><span class="small">${esc(c.remarks||"")}</span>`:"Not recorded"}<div class="workflow-actions"><button class="secondary" onclick="openModal('cibilModal')">Update CIBIL</button></div></div>
+ </div>
+ <div class="panel"><h4>Stage Actions</h4>
+  <div class="workflow-actions">
+   <button class="secondary" onclick="setStage('${id}',4)">CIBIL / Review</button>
+   <button class="secondary" onclick="setStage('${id}',5)">Lender Login</button>
+   <button class="secondary" onclick="setStage('${id}',6)">Processing</button>
+   <button class="secondary" onclick="setStage('${id}',7)">Sanction</button>
+   <button class="secondary" onclick="setStage('${id}',8)">Legal</button>
+   <button class="secondary" onclick="startOtp('Applicant')">Applicant OTP</button>
+   <button class="secondary" onclick="startOtp('Seller')">Seller OTP</button>
+  </div>
+ </div>
+ <div class="panel"><h4>Disbursement Tranches</h4>
+  ${[1,2,3,4].map(n=>{const t=ts.find(x=>x.no===n);return `<div class="tranche"><b>Tranche ${n}</b> — ${t?money(t.amount):"Not planned"} ${t?`• ${esc(t.status)} • ${esc(t.date)}`:""} ${t&&t.status!=="Released"?`<button class="secondary" onclick="releaseTranche('${id}',${n})">Release</button>`:""} </div>`}).join("")}
+  <button class="primary" onclick="openModal('trancheModal')" ${a.applicantOtp&&a.sellerOtp?"":"disabled"}>+ Add Tranche</button>
+ </div>
+ <div class="panel"><h4>Activity</h4><div class="timeline">${events.map(e=>`<div><b>${esc(e.text)}</b><br><span class="small">${esc(e.date)}</span></div>`).join("")||"No activity yet"}</div></div>
+ `;
+}
+
+function render(){
+ load();
+ const q=(document.getElementById("searchLead")?.value||"").toLowerCase();
+ const rows=S.leads.filter(x=>!q||(x.customer+x.mobile+x.product).toLowerCase().includes(q));
+ leadRows.innerHTML=rows.length?rows.map(x=>`<tr><td>${esc(x.id)}</td><td>${esc(x.customer)}<br><small>${esc(x.mobile)}</small></td><td>${esc(x.product)}</td><td>${esc(lender(x.lender))}</td><td>${money(x.amount)}</td><td><span class="badge">${esc(x.status)}</span></td><td><button class="secondary" onclick="statusChange('${x.id}')">Update</button></td></tr>`).join(""):'<tr><td colspan="7" class="empty">No leads yet</td></tr>';
+
+ const aq=(document.getElementById("searchApp")?.value||"").toLowerCase();
+ const apps=S.apps.filter(a=>{const l=getLead(a)||{};return !aq||(a.no+l.customer+l.mobile).toLowerCase().includes(aq)});
+ appRows.innerHTML=apps.length?apps.map(a=>{let l=getLead(a);let tr=S.tranches.filter(x=>x.appId===a.id&&x.status==="Released").length;return `<tr><td>${esc(a.no)}</td><td>${esc(l?.customer||a.lead)}</td><td>${esc(lender(a.lender))}</td><td>${money(a.sanction||l?.amount)}</td><td><span class="badge">${esc(stages[(a.stage||1)-1])}</span></td><td>${tr}/4</td><td><button class="secondary" onclick="openWorkflow('${a.id}')">Open</button></td></tr>`}).join(""):'<tr><td colspan="7" class="empty">No applications</td></tr>';
+
+ connectorRows.innerHTML=S.connectors.length?S.connectors.map(c=>{let ls=S.leads.filter(x=>x.connector==c.id);return `<tr><td>${esc(c.name)}</td><td>${esc(c.mobile||"-")}</td><td>${c.rate}%</td><td>${ls.length}</td><td>${money(ls.filter(x=>x.status==="Disbursed").reduce((s,x)=>s+x.amount*c.rate/100,0))}</td></tr>`).join(""):'<tr><td colspan="5" class="empty">No connectors</td></tr>';
+ lenderRows.innerHTML=S.lenders.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.type)}</td><td><span class="badge">Active</span></td></tr>`).join("");
+ docRows.innerHTML=S.docs.length?S.docs.map(d=>`<tr><td>${esc(d.lead)}</td><td>${esc(d.doc)}</td><td>${esc(d.status)}</td><td>${esc(d.date)}</td></tr>`).join(""):'<tr><td colspan="4" class="empty">No document records</td></tr>';
+ followRows.innerHTML=S.follows.length?S.follows.map(f=>{let l=getLead({lead:f.lead});return `<tr><td>${esc(l?.customer||f.lead)}</td><td>${esc(f.date)}</td><td>${esc(f.type)}</td><td>${esc(f.note||"-")}</td><td>${esc(f.status)}</td></tr>`}).join(""):'<tr><td colspan="5" class="empty">No follow-ups</td></tr>';
+ teamRows.innerHTML=S.team.length?S.team.map(t=>`<tr><td>${esc(t.name)}</td><td>${esc(t.role)}</td><td>${esc(t.mobile||"-")}</td><td>${money(t.target)}</td></tr>`).join(""):'<tr><td colspan="4" class="empty">No employees</td></tr>';
+ const stageByLead={}; S.apps.forEach(a=>{stageByLead[a.lead]=Math.max(stageByLead[a.lead]||0,a.stage||1)});
+ const rows=[
+  ["Open",S.leads.filter(x=>(stageByLead[x.id]||0)<7 && x.status!=="Rejected" && x.status!=="Disbursed")],
+  ["Sanctioned",S.leads.filter(x=>(stageByLead[x.id]||0)>=7)],
+  ["Agreement / OTP Verified",S.leads.filter(x=>S.apps.some(a=>a.lead===x.id && a.applicantOtp && a.sellerOtp))],
+  ["Disbursed",S.leads.filter(x=>(stageByLead[x.id]||0)>=11 || x.status==="Disbursed")],
+  ["Rejected",S.leads.filter(x=>x.status==="Rejected")]
+ ];
+ reportRows.innerHTML=rows.map(([label,list])=>{const vol=list.reduce((sum,x)=>sum+x.amount,0);const com=label==="Disbursed"?list.reduce((sum,x)=>sum+x.amount*x.ourRate/100,0):0;return `<tr><td>${label}</td><td>${list.length}</td><td>${money(vol)}</td><td>${money(com)}</td></tr>`}).join("");
+ const dis=S.leads.filter(x=>x.status==="Disbursed"),open=S.leads.filter(x=>!["Disbursed","Rejected"].includes(x.status));
+ kLeads.textContent=S.leads.length;kOpen.textContent=open.length;kSan.textContent=S.leads.filter(x=>x.status==="Sanctioned").length;kDis.textContent=dis.length;kVol.textContent=money(S.leads.reduce((s,x)=>s+x.amount,0));kCom.textContent=money(dis.reduce((s,x)=>s+x.amount*x.ourRate/100,0));
+}
+function exportCSV(){const head="Lead ID,Customer,Mobile,Product,Lender,Amount,Status\n";const body=S.leads.map(x=>[x.id,x.customer,x.mobile,x.product,lender(x.lender),x.amount,x.status].map(v=>`"${String(v).replaceAll('"','""')}"`).join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([head+body],{type:"text/csv"}));a.download="sammridhi_leads.csv";a.click()}
+function resetTrial(){if(confirm("Reset all trial data?")){localStorage.removeItem(KEY);localStorage.removeItem("sf_final_trial_v1");location.reload()}}
+load();
+</script></body></html>
