@@ -244,14 +244,14 @@ function render(){
  followRows.innerHTML=S.follows.length?S.follows.map(f=>{let l=getLead({lead:f.lead});return `<tr><td>${esc(l?.customer||f.lead)}</td><td>${esc(f.date)}</td><td>${esc(f.type)}</td><td>${esc(f.note||"-")}</td><td>${esc(f.status)}</td></tr>`}).join(""):'<tr><td colspan="5" class="empty">No follow-ups</td></tr>';
  teamRows.innerHTML=S.team.length?S.team.map(t=>`<tr><td>${esc(t.name)}</td><td>${esc(t.role)}</td><td>${esc(t.mobile||"-")}</td><td>${money(t.target)}</td></tr>`).join(""):'<tr><td colspan="4" class="empty">No employees</td></tr>';
  const stageByLead={}; S.apps.forEach(a=>{stageByLead[a.lead]=Math.max(stageByLead[a.lead]||0,a.stage||1)});
- const rows=[
+ const reportRowsData= [
   ["Open",S.leads.filter(x=>(stageByLead[x.id]||0)<7 && x.status!=="Rejected" && x.status!=="Disbursed")],
   ["Sanctioned",S.leads.filter(x=>(stageByLead[x.id]||0)>=7)],
   ["Agreement / OTP Verified",S.leads.filter(x=>S.apps.some(a=>a.lead===x.id && a.applicantOtp && a.sellerOtp))],
   ["Disbursed",S.leads.filter(x=>(stageByLead[x.id]||0)>=11 || x.status==="Disbursed")],
   ["Rejected",S.leads.filter(x=>x.status==="Rejected")]
  ];
- reportRows.innerHTML=rows.map(([label,list])=>{const vol=list.reduce((sum,x)=>sum+x.amount,0);const com=label==="Disbursed"?list.reduce((sum,x)=>sum+x.amount*x.ourRate/100,0):0;return `<tr><td>${label}</td><td>${list.length}</td><td>${money(vol)}</td><td>${money(com)}</td></tr>`}).join("");
+ reportRows.innerHTML=reportRowsData.map(([label,list])=>{const vol=list.reduce((sum,x)=>sum+x.amount,0);const com=label==="Disbursed"?list.reduce((sum,x)=>sum+x.amount*x.ourRate/100,0):0;return `<tr><td>${label}</td><td>${list.length}</td><td>${money(vol)}</td><td>${money(com)}</td></tr>`}).join("");
  const dis=S.leads.filter(x=>x.status==="Disbursed"),open=S.leads.filter(x=>!["Disbursed","Rejected"].includes(x.status));
  kLeads.textContent=S.leads.length;kOpen.textContent=open.length;kSan.textContent=S.leads.filter(x=>x.status==="Sanctioned").length;kDis.textContent=dis.length;kVol.textContent=money(S.leads.reduce((s,x)=>s+x.amount,0));kCom.textContent=money(dis.reduce((s,x)=>s+x.amount*x.ourRate/100,0));
 }
