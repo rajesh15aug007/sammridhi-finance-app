@@ -50,7 +50,38 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}.login{min-heigh
 
 <section id="followups" class="view"><div class="panel"><h3>Follow-ups</h3><button class="primary" onclick="openModal('followModal')">+ Add Follow-up</button><div class="tablewrap"><table><thead><tr><th>Customer</th><th>Date</th><th>Type</th><th>Notes</th><th>Status</th></tr></thead><tbody id="followRows"></tbody></table></div></div></section>
 
-<section id="reports" class="view"><div class="panel"><h3>MIS Reports</h3><button class="secondary" onclick="exportCSV()">Export Leads CSV</button><div class="tablewrap"><table><thead><tr><th>Status</th><th>Leads</th><th>Volume</th><th>Commission</th></tr></thead><tbody id="reportRows"></tbody></table></div></div></section>
+<section id="reports" class="view">
+<div class="panel">
+<h3>MIS Reports</h3>
+
+<div class="toolbar">
+<button class="primary" onclick="downloadCompleteMIS()">📊 Download Complete MIS Excel</button>
+<button class="secondary" onclick="downloadFullSummary()">📄 Full Summary / PDF</button>
+<button class="secondary" onclick="exportCompleteCSV()">📑 Complete MIS CSV</button>
+</div>
+
+<p class="small">
+Complete management report covering leads, applications, workflow, disbursement,
+commission, connectors, lenders, KYC, follow-ups, team, applicants, CIBIL,
+tranches and activity.
+</p>
+
+<div class="tablewrap">
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Leads</th>
+<th>Volume</th>
+<th>Commission</th>
+</tr>
+</thead>
+<tbody id="reportRows"></tbody>
+</table>
+</div>
+
+</div>
+</section>
 
 <section id="team" class="view"><div class="panel"><h3>Team</h3><button class="primary" onclick="openModal('teamModal')">+ Add Employee</button><div class="tablewrap"><table><thead><tr><th>Name</th><th>Role</th><th>Mobile</th><th>Target</th></tr></thead><tbody id="teamRows"></tbody></table></div></div></section>
 
@@ -98,8 +129,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}.login{min-heigh
 
 <div id="toast" class="toast"></div>
 <style>.modal{display:none;position:fixed;inset:0;background:#071a3388;z-index:4;place-items:center;padding:15px}.modal.show{display:grid}.modalbox{background:#fff;width:min(720px,95vw);max-height:90vh;overflow:auto;border-radius:15px;padding:20px}</style>
-<script>
-const KEY="sf_final_trial_v2";
+
 let S={
  leads:[],apps:[],connectors:[],
  lenders:[{id:1,name:"Tata Capital",type:"NBFC"},{id:2,name:"Mahindra Finance",type:"NBFC"},{id:3,name:"HDB Finance",type:"NBFC"},{id:4,name:"Axis Bank",type:"Bank"},{id:5,name:"IDFC First Bank",type:"Bank"}],
@@ -255,7 +285,528 @@ connectorRows.innerHTML=S.connectors.length?S.connectors.map(c=>{const ls=S.lead
  const dis=S.leads.filter(x=>x.status==="Disbursed"),open=S.leads.filter(x=>!["Disbursed","Rejected"].includes(x.status));
  kLeads.textContent=S.leads.length;kOpen.textContent=open.length;kSan.textContent=S.leads.filter(x=>x.status==="Sanctioned").length;kDis.textContent=dis.length;kVol.textContent=money(S.leads.reduce((s,x)=>s+x.amount,0));kCom.textContent=money(dis.reduce((s,x)=>s+x.amount*x.ourRate/100,0));
 }
-function exportCSV(){const head="Lead ID,Customer,Mobile,Product,Lender,Amount,Status\n";const body=S.leads.map(x=>[x.id,x.customer,x.mobile,x.product,lender(x.lender),x.amount,x.status].map(v=>`"${String(v).replaceAll('"','""')}"`).join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([head+body],{type:"text/csv"}));a.download="sammridhi_leads.csv";a.click()}
+function csvEscape(v){
+  return `"${String(v??"").replaceAll('"','""')}"`;
+}
+
+function downloadBlob(content,name,type){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function exportCompleteCSV(){
+
+  const rows=[
+    [
+      "Lead ID","Customer","Mobile","Product","Lender","Connector",
+      "Amount","Status","Our Rate %","Connector Rate %",
+      "Created","Application No","Application Stage",
+      "Application Status","Applicant OTP","Seller OTP",
+      "Disbursed Amount"
+    ]
+  ];
+
+  S.leads.forEach(l=>{
+
+    const apps=S.apps.filter(a=>a.lead===l.id);
+
+    if(!apps.length){
+      rows.push([
+        l.id,l.customer,l.mobile,l.product,lender(l.lender),
+        connector(l.connector),l.amount,l.status,l.ourRate||0,
+        l.connectorRate||0,l.created,"","","","","",0
+      ]);
+    }else{
+
+      apps.forEach(a=>{
+
+        const disb=S.tranches
+          .filter(t=>t.appId===a.id && t.status==="Released")
+          .reduce((s,t)=>s+Number(t.amount||0),0);
+
+        rows.push([
+          l.id,
+          l.customer,
+          l.mobile,
+          l.product,
+          lender(l.lender),
+          connector(l.connector),
+          l.amount,
+          l.status,
+          l.ourRate||0,
+          l.connectorRate||0,
+          l.created,
+          a.no,
+          stages[(a.stage||1)-1]||"",
+          a.status||"",
+          a.applicantOtp?"Verified":"Pending",
+          a.sellerOtp?"Verified":"Pending",
+          disb
+        ]);
+      });
+    }
+  });
+
+  const csv=rows.map(r=>r.map(csvEscape).join(",")).join("\n");
+
+  downloadBlob(
+    csv,
+    "sammridhi_complete_mis.csv",
+    "text/csv;charset=utf-8"
+  );
+
+  toast("Complete MIS CSV downloaded");
+}
+
+
+function downloadCompleteMIS(){
+
+  if(typeof XLSX==="undefined"){
+    return alert(
+      "Excel export library is still loading. Please refresh the page and try again."
+    );
+  }
+
+  const wb=XLSX.utils.book_new();
+
+  function addSheet(name,data){
+
+    const ws=XLSX.utils.json_to_sheet(data);
+
+    ws["!cols"]=Object.keys(data[0]||{}).map(k=>({
+      wch:Math.min(Math.max(k.length+4,12),30)
+    }));
+
+    XLSX.utils.book_append_sheet(wb,ws,name);
+  }
+
+  const totalVolume=S.leads.reduce(
+    (s,x)=>s+Number(x.amount||0),0
+  );
+
+  const disbursedLeads=S.leads.filter(
+    x=>x.status==="Disbursed"
+  );
+
+  const totalDisbursed=S.tranches
+    .filter(t=>t.status==="Released")
+    .reduce((s,t)=>s+Number(t.amount||0),0);
+
+  const totalCommission=disbursedLeads.reduce(
+    (s,x)=>s+
+      Number(x.amount||0)*
+      Number(x.ourRate||0)/100,
+    0
+  );
+
+  /* 1. EXECUTIVE SUMMARY */
+
+  addSheet("Executive Summary",[
+    {Metric:"Report User",Value:S.user||"Trial User"},
+    {Metric:"Report Date",Value:new Date().toLocaleString("en-IN")},
+    {Metric:"Total Leads",Value:S.leads.length},
+    {Metric:"Open Leads",Value:S.leads.filter(x=>!["Disbursed","Rejected"].includes(x.status)).length},
+    {Metric:"Sanctioned Leads",Value:S.leads.filter(x=>x.status==="Sanctioned").length},
+    {Metric:"Disbursed Leads",Value:disbursedLeads.length},
+    {Metric:"Rejected Leads",Value:S.leads.filter(x=>x.status==="Rejected").length},
+    {Metric:"Total Loan Volume",Value:totalVolume},
+    {Metric:"Total Disbursed",Value:totalDisbursed},
+    {Metric:"Estimated Commission",Value:totalCommission},
+    {Metric:"Applications",Value:S.apps.length},
+    {Metric:"Connectors / DSA",Value:S.connectors.length},
+    {Metric:"Lenders",Value:S.lenders.length},
+    {Metric:"KYC / Documents",Value:S.docs.length},
+    {Metric:"Follow-ups",Value:S.follows.length},
+    {Metric:"Team Members",Value:S.team.length},
+    {Metric:"Applicants / Persons",Value:S.people.length},
+    {Metric:"CIBIL Records",Value:S.cibil.length},
+    {Metric:"Tranches",Value:S.tranches.length}
+  ]);
+
+  /* 2. LEADS */
+
+  addSheet("All Leads",S.leads.map(l=>({
+    "Lead ID":l.id,
+    "Customer":l.customer,
+    "Mobile":l.mobile,
+    "Product":l.product,
+    "Lender":lender(l.lender),
+    "Connector":connector(l.connector),
+    "Amount":Number(l.amount||0),
+    "Status":l.status,
+    "Our Rate %":Number(l.ourRate||0),
+    "Connector Rate %":Number(l.connectorRate||0),
+    "Estimated Commission":Number(l.amount||0)*Number(l.ourRate||0)/100,
+    "Created":l.created
+  })));
+
+  /* 3. APPLICATIONS */
+
+  addSheet("Applications",S.apps.map(a=>{
+    const l=getLead(a)||{};
+
+    return {
+      "Application ID":a.id,
+      "Application No":a.no,
+      "Lead ID":a.lead,
+      "Customer":l.customer||"",
+      "Mobile":l.mobile||"",
+      "Product":l.product||"",
+      "Lender":lender(a.lender),
+      "Requested Amount":Number(l.amount||0),
+      "Sanction Amount":Number(a.sanction||0),
+      "Stage":stages[(a.stage||1)-1]||"",
+      "Status":a.status||"",
+      "Applicant OTP":a.applicantOtp?"Verified":"Pending",
+      "Seller OTP":a.sellerOtp?"Verified":"Pending",
+      "Created":a.created
+    };
+  }));
+
+  /* 4. WORKFLOW */
+
+  addSheet("Workflow",S.apps.map(a=>{
+    const l=getLead(a)||{};
+
+    return {
+      "Application No":a.no,
+      "Customer":l.customer||"",
+      "Current Stage":stages[(a.stage||1)-1]||"",
+      "Stage Number":a.stage||1,
+      "Status":a.status||"",
+      "Application":"Completed",
+      "Applicants":S.people.some(p=>p.appId===a.id)?"Completed":"Pending",
+      "KYC":S.docs.some(d=>d.lead===a.lead)?"Available":"Pending",
+      "CIBIL":S.cibil.some(c=>c.appId===a.id)?"Available":"Pending",
+      "Applicant OTP":a.applicantOtp?"Verified":"Pending",
+      "Seller OTP":a.sellerOtp?"Verified":"Pending",
+      "Disbursement":S.tranches.some(t=>t.appId===a.id)?"Available":"Pending"
+    };
+  }));
+
+  /* 5. DISBURSEMENTS */
+
+  addSheet("Disbursements",S.tranches.map(t=>{
+    const a=getApp(t.appId)||{};
+    const l=getLead(a)||{};
+
+    return {
+      "Application No":a.no||"",
+      "Customer":l.customer||"",
+      "Lead ID":a.lead||"",
+      "Lender":lender(a.lender),
+      "Tranche No":t.no,
+      "Amount":Number(t.amount||0),
+      "Date":t.date,
+      "Status":t.status,
+      "Released Amount":t.status==="Released"?Number(t.amount||0):0
+    };
+  }));
+
+  /* 6. COMMISSION */
+
+  addSheet("Commission",S.leads.map(l=>({
+    "Lead ID":l.id,
+    "Customer":l.customer,
+    "Lender":lender(l.lender),
+    "Connector":connector(l.connector),
+    "Loan Amount":Number(l.amount||0),
+    "Our Rate %":Number(l.ourRate||0),
+    "Gross Commission":Number(l.amount||0)*Number(l.ourRate||0)/100,
+    "Connector Rate %":Number(l.connectorRate||0),
+    "Connector Payable":Number(l.amount||0)*Number(l.connectorRate||0)/100,
+    "Status":l.status
+  })));
+
+  /* 7. CONNECTORS */
+
+  addSheet("Connectors DSA",S.connectors.map(c=>{
+    const ls=S.leads.filter(x=>x.connector===c.id);
+
+    return {
+      "Connector ID":c.id,
+      "Name":c.name,
+      "Mobile":c.mobile||"",
+      "Rate %":Number(c.rate||0),
+      "Total Leads":ls.length,
+      "Total Business":ls.reduce((s,x)=>s+Number(x.amount||0),0),
+      "Estimated Payable":ls.reduce(
+        (s,x)=>s+
+          Number(x.amount||0)*
+          Number(x.connectorRate||c.rate||0)/100,
+        0
+      )
+    };
+  }));
+
+  /* 8. LENDERS */
+
+  addSheet("Lenders",S.lenders.map(x=>({
+    "Lender ID":x.id,
+    "Lender Name":x.name,
+    "Type":x.type,
+    "Active":"Yes",
+    "Lead Count":S.leads.filter(l=>l.lender==x.id).length,
+    "Application Count":S.apps.filter(a=>a.lender==x.id).length,
+    "Business Volume":S.leads
+      .filter(l=>l.lender==x.id)
+      .reduce((s,l)=>s+Number(l.amount||0),0)
+  })));
+
+  /* 9. KYC / DOCUMENTS */
+
+  addSheet("KYC Documents",S.docs.map(d=>{
+    const l=getLead({lead:d.lead})||{};
+
+    return {
+      "Lead ID":d.lead,
+      "Customer":l.customer||"",
+      "Mobile":l.mobile||"",
+      "Document":d.doc,
+      "Status":d.status,
+      "Date":d.date
+    };
+  }));
+
+  /* 10. FOLLOW UPS */
+
+  addSheet("Follow Ups",S.follows.map(f=>{
+    const l=getLead({lead:f.lead})||{};
+
+    return {
+      "Lead ID":f.lead,
+      "Customer":l.customer||"",
+      "Mobile":l.mobile||"",
+      "Date":f.date,
+      "Type":f.type,
+      "Notes":f.note||"",
+      "Status":f.status||""
+    };
+  }));
+
+  /* 11. TEAM */
+
+  addSheet("Team",S.team.map(t=>({
+    "Name":t.name,
+    "Role":t.role,
+    "Mobile":t.mobile||"",
+    "Monthly Target":Number(t.target||0)
+  })));
+
+  /* 12. APPLICANTS */
+
+  addSheet("Applicants",S.people.map(p=>{
+    const a=getApp(p.appId)||{};
+    const l=getLead(a)||{};
+
+    return {
+      "Application No":a.no||"",
+      "Customer":l.customer||"",
+      "Role":p.role,
+      "Name":p.name,
+      "Mobile":p.mobile||"",
+      "PAN":p.pan||""
+    };
+  }));
+
+  /* 13. CIBIL */
+
+  addSheet("CIBIL",S.cibil.map(c=>{
+    const a=getApp(c.appId)||{};
+    const l=getLead(a)||{};
+
+    return {
+      "Application No":a.no||"",
+      "Customer":l.customer||"",
+      "Score":c.score||"",
+      "Status":c.status||"",
+      "Remarks":c.remarks||"",
+      "Date":c.date||""
+    };
+  }));
+
+  /* 14. TRANCHES */
+
+  addSheet("Tranches",S.tranches.map(t=>{
+    const a=getApp(t.appId)||{};
+    const l=getLead(a)||{};
+
+    return {
+      "Application No":a.no||"",
+      "Customer":l.customer||"",
+      "Tranche":t.no,
+      "Amount":Number(t.amount||0),
+      "Date":t.date,
+      "Status":t.status
+    };
+  }));
+
+  /* 15. ACTIVITY */
+
+  addSheet("Activity",S.events.map(e=>{
+    const a=getApp(e.appId)||{};
+    const l=getLead(a)||{};
+
+    return {
+      "Application No":a.no||"",
+      "Customer":l.customer||"",
+      "Activity":e.text,
+      "Date":e.date
+    };
+  }));
+
+  XLSX.writeFile(
+    wb,
+    "Sammridhi_Finance_Complete_MIS.xlsx"
+  );
+
+  toast("Complete MIS Excel downloaded");
+}
+
+
+function downloadFullSummary(){
+
+  const totalVolume=S.leads.reduce(
+    (s,x)=>s+Number(x.amount||0),0
+  );
+
+  const totalDisbursed=S.tranches
+    .filter(t=>t.status==="Released")
+    .reduce((s,t)=>s+Number(t.amount||0),0);
+
+  const totalCommission=S.leads
+    .filter(x=>x.status==="Disbursed")
+    .reduce(
+      (s,x)=>s+
+        Number(x.amount||0)*
+        Number(x.ourRate||0)/100,
+      0
+    );
+
+  const rows=[
+    ["Metric","Value"],
+    ["Report User",S.user||"Trial User"],
+    ["Report Date",new Date().toLocaleString("en-IN")],
+    ["Total Leads",S.leads.length],
+    ["Open Leads",S.leads.filter(x=>!["Disbursed","Rejected"].includes(x.status)).length],
+    ["Sanctioned Leads",S.leads.filter(x=>x.status==="Sanctioned").length],
+    ["Disbursed Leads",S.leads.filter(x=>x.status==="Disbursed").length],
+    ["Rejected Leads",S.leads.filter(x=>x.status==="Rejected").length],
+    ["Total Loan Volume",money(totalVolume)],
+    ["Total Disbursed",money(totalDisbursed)],
+    ["Estimated Commission",money(totalCommission)],
+    ["Applications",S.apps.length],
+    ["Connectors / DSA",S.connectors.length],
+    ["Lenders",S.lenders.length],
+    ["KYC Documents",S.docs.length],
+    ["Follow-ups",S.follows.length],
+    ["Team Members",S.team.length]
+  ];
+
+  const table=rows.map((r,i)=>
+    `<tr>
+      <${i===0?"th":"td"}>${esc(r[0])}</${i===0?"th":"td"}>
+      <${i===0?"th":"td"}>${esc(r[1])}</${i===0?"th":"td"}>
+    </tr>`
+  ).join("");
+
+  const win=window.open("","_blank");
+
+  if(!win){
+    return alert("Please allow pop-ups for this site, then try again.");
+  }
+
+  win.document.write(`
+  <!doctype html>
+  <html>
+  <head>
+  <title>Sammridhi Finance - Full MIS Summary</title>
+  <style>
+    body{
+      font-family:Arial,sans-serif;
+      padding:35px;
+      color:#14213d;
+    }
+    h1{margin-bottom:5px}
+    h2{margin-top:30px}
+    .sub{color:#667085;margin-bottom:25px}
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:15px;
+    }
+    th,td{
+      border:1px solid #d9dee8;
+      padding:10px;
+      text-align:left;
+    }
+    th{
+      background:#eef4ff;
+      font-weight:700;
+    }
+    .footer{
+      margin-top:35px;
+      font-size:11px;
+      color:#777;
+    }
+    @media print{
+      body{padding:10px}
+    }
+  </style>
+  </head>
+  <body>
+    <h1>Sammridhi Finance</h1>
+    <div class="sub">
+      Full MIS Summary • ${esc(S.user||"Trial User")}
+      • ${new Date().toLocaleString("en-IN")}
+    </div>
+
+    <h2>Executive Summary</h2>
+
+    <table>
+      ${table}
+    </table>
+
+    <h2>Status Summary</h2>
+
+    <table>
+      <tr>
+        <th>Status</th>
+        <th>Leads</th>
+        <th>Volume</th>
+        <th>Commission</th>
+      </tr>
+
+      ${Array.from(document.querySelectorAll("#reportRows tr"))
+        .map(tr=>tr.outerHTML)
+        .join("")}
+    </table>
+
+    <div class="footer">
+      Sammridhi Finance • Final Trial Build • Demo only
+    </div>
+
+    <script>
+      window.onload=function(){
+        setTimeout(function(){
+          window.print();
+        },500);
+      };
+    <\/script>
+
+  </body>
+  </html>
+  `);
+
+  win.document.close();
+}
 function resetTrial(){if(confirm("Reset all trial data?")){localStorage.removeItem(KEY);localStorage.removeItem("sf_final_trial_v1");location.reload()}}
 load();
 </script></body></html>
