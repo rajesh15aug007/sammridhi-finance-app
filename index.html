@@ -11,7 +11,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}.login{min-heigh
 .small{font-size:11px;color:#718096}.success{color:#167044;font-weight:700}.warn{color:#9a6700;font-weight:700}
 .timeline{border-left:3px solid #dce8ff;padding-left:14px;margin:10px 0}
 .timeline div{margin:8px 0}.otpbox{background:#f7faff;border:1px dashed #9bb9e8;padding:12px;border-radius:10px;margin-top:10px}
-.tranche{border:1px solid #e3e8f0;border-radius:10px;padding:12px;margin:8px 0;background:#fbfcfe}
+.tranche{border:1px solid #e3e8f0;border-radius:10px;padding:12px;margin:8px 0;background:#fbfcfe}.subtabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.subtab{padding:8px 12px;border:1px solid #d5ddea;border-radius:8px;background:#fff}.subtab.active{background:#0b5ed7;color:#fff;border-color:#0b5ed7}
 @media(max-width:1000px){.cards{grid-template-columns:repeat(3,1fr)}}</style><body>
 <div id="login" class="login"><div class="loginbox">
 <div class="brand">Sammridhi <span class="gold">Finance</span></div><h2>Final Trial</h2>
@@ -22,7 +22,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}.login{min-heigh
 </div></div>
 <div id="app" class="app">
 <aside class="side"><div class="brand">Sammridhi Finance</div>
-<button class="nav active" onclick="show('dashboard',this)">Dashboard</button><button class="nav" onclick="show('leads',this)">Leads</button><button class="nav" onclick="show('applications',this)">Applications</button><button class="nav" onclick="show('workflow',this)">Workflow</button><button class="nav" onclick="show('connectors',this)">Connectors</button><button class="nav" onclick="show('lenders',this)">Lenders</button><button class="nav" onclick="show('documents',this)">KYC / Documents</button><button class="nav" onclick="show('followups',this)">Follow-ups</button><button class="nav" onclick="show('reports',this)">MIS Reports</button><button class="nav" onclick="show('team',this)">Team</button><button class="nav" onclick="show('business',this)">Cases</button><div class="nav-group"><div class="nav-group-title">Used Vehicle</div><button class="nav nav-sub" onclick="show('buyers',this)">↳ Buyers</button><button class="nav nav-sub" onclick="show('sellers',this)">↳ Sellers</button><button class="nav nav-sub" onclick="show('vehicles',this)">↳ Vehicle Details</button></div><button class="nav" onclick="show('insurance',this)">Insurance</button><button class="nav" onclick="show('rto',this)">RTO & Charges</button><button class="nav" onclick="show('agreements',this)">Agreements</button><button class="nav" onclick="show('payments',this)">Payments</button><button class="nav" onclick="show('masters',this)">Product / Module Master</button><button class="nav" onclick="show('permissions',this)">Permissions</button><button class="nav" onclick="show('automations',this)">Automations</button><button class="nav" onclick="show('settings',this)">Settings</button></aside>
+<button class="nav active" onclick="show('dashboard',this)">Dashboard</button><button class="nav" onclick="show('leads',this)">Leads</button><button class="nav" onclick="show('applications',this)">Applications</button><button class="nav" onclick="show('workflow',this)">Workflow</button><button class="nav" onclick="show('connectors',this)">Connectors</button><button class="nav" onclick="show('lenders',this)">Lenders</button><button class="nav" onclick="show('documents',this)">KYC / Documents</button><button class="nav" onclick="show('followups',this)">Follow-ups</button><button class="nav" onclick="show('reports',this)">MIS Reports</button><button class="nav" onclick="show('team',this)">Team</button><button class="nav" onclick="show('business',this)">Cases</button><div class="nav-group"><div class="nav-group-title">Used Vehicle</div><button class="nav nav-sub" onclick="show('buyers',this)">↳ Buyers</button><button class="nav nav-sub" onclick="show('sellers',this)">↳ Sellers</button><button class="nav nav-sub" onclick="show('vehicles',this)">↳ Vehicle Details</button></div><button class="nav" onclick="show('insurance',this)">Insurance</button><button class="nav" onclick="show('rto',this)">RTO & Charges</button><button class="nav" onclick="show('agreements',this)">Agreements</button><button class="nav" onclick="show('payments',this)">Payments</button><button class="nav" onclick="show('accounting',this)">Accounting / Fund Flow</button><button class="nav" onclick="show('masters',this)">Masters</button><button class="nav" onclick="show('permissions',this)">Permissions</button><button class="nav" onclick="show('automations',this)">Automations</button><button class="nav" onclick="show('settings',this)">Settings</button></aside>
 <main class="main"><div class="top"><div><h1 id="heading">Dashboard</h1><div class="trial">Final Trial Mode • <span id="user"></span></div></div><button class="secondary" onclick="resetTrial()">Reset Trial</button></div>
 
 <section id="dashboard" class="view active"><div class="cards">
@@ -84,7 +84,7 @@ tranches and activity.
 </section>
 
 
-<section id="business" class="view"><div class="panel"><h3>Cases</h3><p class="small"><b>New Case</b> is where you start a new customer business. Select the product first (Used Vehicle, New Vehicle, Insurance, Loan / Finance or Other Product). The app then attaches the selected product and its enabled modules to that case.</p><div class="grid"><div class="field"><label>Product</label><select id="caseProduct" onchange="renderCaseModules()"></select></div><div class="field"><label>Customer</label><input id="caseCustomer" placeholder="Customer name"></div><div class="field"><label>Mobile</label><input id="caseMobile" placeholder="Mobile"></div><div class="field"><label>Case Remarks</label><input id="caseRemarks" placeholder="Remarks"></div></div><div id="caseModules" class="panel" style="margin-top:12px"></div><button class="primary" onclick="createBusinessCase()">Create New Case</button></div><div class="panel"><h3>Cases</h3><div class="tablewrap"><table><thead><tr><th>Case ID</th><th>Customer</th><th>Product</th><th>Modules</th><th>Status</th></tr></thead><tbody id="caseRows"></tbody></table></div></div></section>
+<section id="business" class="view"><div class="panel"><h3>Cases</h3><p class="small"><b>Cases</b> are individual customer businesses. Select the product first. All products are available in the dropdown, and only the modules/workflow relevant to that product are attached. For <b>Used Vehicle</b>, the finance journey runs from CIBIL check → lender login → document checks → valuation/FI → credit decision → approval → buyer/seller agreement → RTO & insurance clearance → tranche disbursement → PDD.</p><div class="grid"><div class="field"><label>Product</label><select id="caseProduct" onchange="renderCaseModules()"></select></div><div class="field"><label>Customer</label><input id="caseCustomer" placeholder="Customer name"></div><div class="field"><label>Mobile</label><input id="caseMobile" placeholder="Mobile"></div><div class="field"><label>Case Remarks</label><input id="caseRemarks" placeholder="Remarks"></div></div><div id="caseModules" class="panel" style="margin-top:12px"></div><button class="primary" onclick="createBusinessCase()">Create New Case</button></div><div class="panel"><h3>Cases</h3><div class="tablewrap"><table><thead><tr><th>Case ID</th><th>Customer</th><th>Product</th><th>Modules</th><th>Status</th></tr></thead><tbody id="caseRows"></tbody></table></div></div></section>
 <section id="buyers" class="view"><div class="panel"><h3>Buyer Master</h3><button class="primary" onclick="openModal('buyerModal')">+ Add Buyer</button><div class="tablewrap"><table><thead><tr><th>Case</th><th>Name</th><th>Mobile</th><th>PAN</th><th>Address</th></tr></thead><tbody id="buyerRows"></tbody></table></div></div></section>
 <section id="sellers" class="view"><div class="panel"><h3>Seller Master</h3><button class="primary" onclick="openModal('sellerModal')">+ Add Seller</button><div class="tablewrap"><table><thead><tr><th>Case</th><th>Name</th><th>Mobile</th><th>PAN</th><th>Address</th></tr></thead><tbody id="sellerRows"></tbody></table></div></div></section>
 <section id="vehicles" class="view"><div class="panel"><h3>Used Vehicle</h3><button class="primary" onclick="openModal('vehicleModal')">+ Add Vehicle</button><div class="tablewrap"><table><thead><tr><th>Case</th><th>Registration</th><th>Type</th><th>Make / Model</th><th>Year</th><th>Seller</th><th>Sale Value</th></tr></thead><tbody id="vehicleRows"></tbody></table></div></div></section>
@@ -92,7 +92,7 @@ tranches and activity.
 <section id="rto" class="view"><div class="panel"><h3>RTO & Charges</h3><div class="toolbar"><button class="primary" onclick="openModal('rtoModal')">+ New RTO Case</button><button class="secondary" onclick="show('masters',document.querySelectorAll('.nav')[document.querySelectorAll('.nav').length-4])">RTO Rate Master</button></div><div class="tablewrap"><table><thead><tr><th>Case</th><th>Vehicle</th><th>Service</th><th>Seller/Purchaser</th><th>Base Rate</th><th>Additional</th><th>Total</th><th>Payment</th></tr></thead><tbody id="rtoRows"></tbody></table></div></div></section>
 <section id="agreements" class="view"><div class="panel"><h3>Buyer / Seller Agreement & OTP</h3><button class="primary" onclick="openModal('agreementModal')">+ New Agreement</button><div class="tablewrap"><table><thead><tr><th>Case</th><th>Type</th><th>Buyer</th><th>Seller</th><th>Agreement</th><th>Applicant OTP</th><th>Seller OTP</th><th>Date</th></tr></thead><tbody id="agreementRows"></tbody></table></div></div></section>
 <section id="payments" class="view"><div class="panel"><h3>Payment Collection</h3><button class="primary" onclick="openModal('paymentModal')">+ Add Payment</button><div class="tablewrap"><table><thead><tr><th>Case</th><th>Category</th><th>Party</th><th>Amount</th><th>Mode</th><th>Date</th><th>Status</th><th>Remarks</th></tr></thead><tbody id="paymentRows"></tbody></table></div></div></section>
-<section id="masters" class="view"><div class="panel"><h3>Product Master & Module Mapping</h3><p class="small">Admin controls which modules each product exposes. Existing loan workflow remains reusable.</p><div class="toolbar"><button class="primary" onclick="openModal('productModal')">+ Add Product</button><button class="secondary" onclick="openModal('moduleModal')">+ Add Module</button></div><div id="productMasterTable"></div></div><div class="panel"><h3>RTO Rate Master</h3><button class="primary" onclick="openModal('rtoRateModal')">+ Add / Change RTO Rate</button><div class="tablewrap"><table><thead><tr><th>Vehicle Type</th><th>Service</th><th>Present Rate</th><th>Not Present Rate</th><th>Note</th></tr></thead><tbody id="rtoRateRows"></tbody></table></div></div></section>
+<section id="accounting" class="view"><div class="panel"><h3>Accounting / Fund Flow by Case</h3><p class="small">Select a case and record only the charges applicable to that case. BT, RTO and Insurance are independent; RTO/Insurance are available for BT and non-BT cases.</p><div class="toolbar"><select id="acctCase" onchange="renderAccountingCase()"></select></div><div id="acctBox"></div></div></section><section id="masters" class="view"><div class="panel"><h3>Product Master & Module Mapping</h3><p class="small">Admin controls which modules each product exposes. Existing loan workflow remains reusable.</p><div class="toolbar"><button class="primary" onclick="openModal('productModal')">+ Add Product</button><button class="secondary" onclick="openModal('moduleModal')">+ Add Module</button></div><div id="productMasterTable"></div></div><div class="panel"><h3>Customer Profile & IRR Master</h3><p class="small">IRR is frozen automatically at application level from the selected customer profile.</p><div class="toolbar"><button class="primary" onclick="openModal('profileModal')">+ Add / Change Profile</button></div><div class="tablewrap"><table><thead><tr><th>Profile</th><th>IRR %</th><th>Status</th></tr></thead><tbody id="profileRows"></tbody></table></div></div><div class="panel"><h3>Lender / Bank / NBFC Payout Master</h3><p class="small">Maintain lender-wise payout by product segment and split between DSA, Connector and Sub-DSA. Effective dates protect historical cases.</p><button class="primary" onclick="openModal('payoutModal')">+ Add Payout Structure</button><div class="tablewrap"><table><thead><tr><th>Lender</th><th>Segment</th><th>Payout Type</th><th>Gross</th><th>Connector</th><th>Sub-DSA</th><th>Effective</th></tr></thead><tbody id="payoutRows"></tbody></table></div></div><div class="panel"><h3>RTO Rate Master</h3><button class="primary" onclick="openModal('rtoRateModal')">+ Add / Change RTO Rate</button><div class="tablewrap"><table><thead><tr><th>Vehicle Type</th><th>Service</th><th>Present Rate</th><th>Not Present Rate</th><th>Note</th></tr></thead><tbody id="rtoRateRows"></tbody></table></div></div></section>
 <section id="permissions" class="view"><div class="panel"><h3>User Permissions</h3><p class="small">Set role-level access to modules for the browser trial.</p><button class="primary" onclick="openModal('permissionModal')">+ Add Permission</button><div class="tablewrap"><table><thead><tr><th>Role</th><th>Modules Allowed</th><th>Active</th></tr></thead><tbody id="permissionRows"></tbody></table></div></div></section>
 <section id="automations" class="view"><div class="panel"><h3>Automations</h3><button class="primary" onclick="openModal('automationModal')">+ Add Automation</button><div class="tablewrap"><table><thead><tr><th>Name</th><th>Trigger</th><th>Action</th><th>Enabled</th></tr></thead><tbody id="automationRows"></tbody></table></div></div></section>
 <section id="team" class="view"><div class="panel"><h3>Team</h3><button class="primary" onclick="openModal('teamModal')">+ Add Employee</button><div class="tablewrap"><table><thead><tr><th>Name</th><th>Role</th><th>Mobile</th><th>Target</th></tr></thead><tbody id="teamRows"></tbody></table></div></div></section>
@@ -100,7 +100,7 @@ tranches and activity.
 <section id="settings" class="view"><div class="panel"><h3>Trial Settings</h3><p>This browser trial is intentionally self-contained. Data can be reset at any time.</p><p><b>Production deployment:</b> PostgreSQL, secure authentication, encrypted KYC storage, backups, HTTPS, MFA and notification integrations are required before live customer data is used.</p></div></section>
 <div class="footer">Sammridhi Finance • Final Trial Build • Demo only</div></main></div>
 
-<div id="leadModal" class="modal"><div class="modalbox"><h3>New Lead</h3><div class="grid"><div class="field"><label>Customer</label><input id="lc"></div><div class="field"><label>Mobile</label><input id="lm"></div><div class="field"><label>Product</label><input id="lp" placeholder="Commercial Vehicle Loan"></div><div class="field"><label>Amount</label><input id="la" type="number"></div><div class="field"><label>Lender</label><select id="ll"></select></div><div class="field"><label>Connector</label><select id="lcx"></select></div></div><button class="primary" onclick="addLead()">Create</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+<div id="leadModal" class="modal"><div class="modalbox"><h3>New Lead</h3><p class="small">Select the nature of business, customer profile and finance type. Product-specific workflow will follow automatically.</p><div class="grid"><div class="field"><label>Customer</label><input id="lc"></div><div class="field"><label>Mobile</label><input id="lm"></div><div class="field"><label>Product</label><select id="lp"></select></div><div class="field"><label>Customer Profile</label><select id="lprofile"></select></div><div class="field"><label>Finance Type</label><select id="lfinance"><option>Refinance</option><option>Repurchase</option><option>BT-Refinance</option><option>BT Repurchase</option></select></div><div class="field"><label>Amount</label><input id="la" type="number"></div><div class="field"><label>Lender</label><select id="ll"></select></div><div class="field"><label>Connector</label><select id="lcx"></select></div><div class="field"><label>Insurance</label><select id="lInsuranceMode"><option>Inhouse</option><option>Outside</option><option>Not Required</option></select></div><div class="field"><label>RTO</label><select id="lRtoMode"><option>Inhouse</option><option>Outside</option><option>Not Required</option></select></div></div><div id="leadBtBox" class="panel" style="display:none;margin-top:12px"><b>BT / Takeover Lender</b><div class="grid" style="margin-top:8px"><div class="field"><label>Existing Lender</label><select id="lBtLender"></select></div><div class="field"><label>Foreclosure Amount</label><input id="lBtAmount" type="number"></div><div class="field"><label>Foreclosure Date</label><input id="lBtDate" type="date"></div><div class="field"><label>Account Name</label><input id="lBtAccName"></div><div class="field"><label>Account Number</label><input id="lBtAccNo"></div><div class="field"><label>IFSC Code</label><input id="lBtIfsc"></div></div></div><button class="primary" onclick="addLead()">Create</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
 <button class="primary" onclick="addApp()">Create</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
 <div id="connectorModal" class="modal"><div class="modalbox"><h3>Add Connector</h3><div class="grid"><div class="field"><label>Name</label><input id="cn"></div><div class="field"><label>Mobile</label><input id="cm"></div><div class="field"><label>Commission %</label><input id="cr" type="number" step=".01"></div></div><button class="primary" onclick="addConnector()">Add</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
 <div id="lenderModal" class="modal"><div class="modalbox"><h3>Add Lender</h3><div class="grid"><div class="field"><label>Name</label><input id="ln"></div><div class="field"><label>Type</label><select id="lt"><option>Bank</option><option>NBFC</option></select></div></div><button class="primary" onclick="addLender()">Add</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
@@ -108,10 +108,15 @@ tranches and activity.
 <div id="followModal" class="modal"><div class="modalbox"><h3>Add Follow-up</h3><div class="grid"><div class="field"><label>Lead</label><select id="fl"></select></div><div class="field"><label>Date</label><input id="fd" type="date"></div><div class="field"><label>Type</label><select id="ft"><option>Call</option><option>WhatsApp</option><option>Visit</option><option>Email</option></select></div><div class="field"><label>Notes</label><input id="fn"></div></div><button class="primary" onclick="addFollow()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
 <div id="teamModal" class="modal"><div class="modalbox"><h3>Add Employee</h3><div class="grid"><div class="field"><label>Name</label><input id="tn"></div><div class="field"><label>Role</label><select id="tr"><option>Employee</option><option>Manager</option></select></div><div class="field"><label>Mobile</label><input id="tm"></div><div class="field"><label>Monthly Target</label><input id="tt" type="number"></div></div><button class="primary" onclick="addTeam()">Add</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
 <div id="appModal" class="modal"><div class="modalbox"><h3>New Application</h3>
-<div class="grid"><div class="field"><label>Lead</label><select id="al"></select></div>
-<div class="field"><label>Application No.</label><input id="an" placeholder="e.g. SF-APP-001"></div>
-<div class="field"><label>Lender</label><select id="ale"></select></div>
-<div class="field"><label>Requested Amount</label><input id="asa" type="number"></div></div>
+<p class="small">Application-level profile, co-applicant/guarantor and in-house service controls are captured here.</p>
+<div class="grid">
+<div class="field"><label>Lead</label><select id="al"></select></div><div class="field"><label>Application No.</label><input id="an" placeholder="e.g. SF-APP-001"></div>
+<div class="field"><label>Lender</label><select id="ale"></select></div><div class="field"><label>Requested Amount</label><input id="asa" type="number"></div><div class="field"><label>Customer Profile</label><select id="aprofile"></select></div><div class="field"><label>Finance Type</label><select id="afinance"><option>Refinance</option><option>Repurchase</option><option>BT-Refinance</option><option>BT Repurchase</option></select></div><div class="field"><label>Insurance</label><select id="ainsuranceMode" onchange="refreshInhouseOptions()"><option>Inhouse</option><option>Outside</option><option>Not Required</option></select></div><div class="field"><label>RTO</label><select id="artoMode" onchange="refreshInhouseOptions()"><option>Inhouse</option><option>Outside</option><option>Not Required</option></select></div>
+<div class="field"><label>Customer Profile</label><select id="aprofile" onchange="refreshProfileIRR()"></select></div><div class="field"><label>IRR Frozen from Profile Master</label><input id="airr" readonly></div>
+<div class="field"><label>Insurance</label><select id="ainsuranceMode" onchange="refreshInhouseOptions()"><option>Inhouse</option><option>Outside</option></select></div>
+<div class="field"><label>RTO</label><select id="artoMode" onchange="refreshInhouseOptions()"><option>Inhouse</option><option>Outside</option></select></div></div>
+<div class="panel" id="inhouseOptions" style="margin-top:12px;background:#f7faff"><b>In-house Service Options</b><div class="small" style="margin-top:5px">When Insurance or RTO is Inhouse, the corresponding charge/service options are available to the application.</div><div class="subtabs" id="inhouseTabs"></div></div>
+<div class="panel" style="margin-top:12px"><b>Additional Applicants</b><div class="small" style="margin-top:5px">Co-applicant and Guarantor can be added after application creation from the workflow.</div></div>
 <button class="primary" onclick="addApp()">Create</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
 
 <div id="personModal" class="modal"><div class="modalbox"><h3>Add Applicant / Co-applicant / Guarantor</h3>
@@ -123,6 +128,7 @@ tranches and activity.
 <div id="cibilModal" class="modal"><div class="modalbox"><h3>CIBIL Record</h3>
 <div class="grid"><div class="field"><label>Score</label><input id="cs" type="number" min="300" max="900"></div>
 <div class="field"><label>Report Status</label><select id="cst"><option>Requested</option><option>Received</option><option>Reviewed</option></select></div>
+<div class="field"><label>CIBIL Decision</label><select id="cdec"><option>Pending</option><option>OK</option><option>Not OK</option></select></div>
 <div class="field"><label>Remarks</label><input id="crm"></div></div>
 <button class="primary" onclick="saveCibil()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
 
@@ -151,6 +157,7 @@ tranches and activity.
 <div id="productModal" class="modal"><div class="modalbox"><h3>Add Product</h3><div class="grid"><div class="field"><label>Product Name</label><input id="prodName"></div><div class="field"><label>Product ID</label><input id="prodId"></div><div class="field"><label>Description</label><input id="prodDesc"></div></div><button class="primary" onclick="saveProduct()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
 <div id="moduleModal" class="modal"><div class="modalbox"><h3>Add Module</h3><div class="grid"><div class="field"><label>Module Name</label><input id="modName"></div><div class="field"><label>Module ID</label><input id="modId"></div></div><button class="primary" onclick="saveModule()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
 <div id="rtoRateModal" class="modal"><div class="modalbox"><h3>Add / Change RTO Rate</h3><div class="grid"><div class="field"><label>Vehicle Type</label><select id="rrVehicle"><option>CAR 5 Seater</option><option>CAR 7 Seater</option><option>CV PICKUP</option><option>MHCV</option></select></div><div class="field"><label>Service</label><input id="rrService" placeholder="TA + HPA"></div><div class="field"><label>Present Rate</label><input id="rrPresent" type="number"></div><div class="field"><label>Not Present Rate</label><input id="rrAbsent" type="number"></div><div class="field"><label>Note</label><input id="rrNote"></div></div><button class="primary" onclick="saveRtoRate()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
+<div id="payoutModal" class="modal"><div class="modalbox"><h3>Lender Payout Structure</h3><div class="grid"><div class="field"><label>Lender</label><select id="poLender"></select></div><div class="field"><label>Product Segment</label><select id="poSegment"><option>MHCV</option><option>SCV</option><option>LCV / ICV</option><option>Used Car</option><option>New Car</option><option>Other</option></select></div><div class="field"><label>Payout Type</label><select id="poType"><option>Percentage</option><option>Flat</option></select></div><div class="field"><label>Gross Payout</label><input id="poGross" type="number" step="0.01"></div><div class="field"><label>Connector Payout</label><input id="poConnector" type="number" step="0.01"></div><div class="field"><label>Sub-DSA Payout</label><input id="poSub" type="number" step="0.01"></div><div class="field"><label>Effective From</label><input id="poFrom" type="date"></div><div class="field"><label>Effective To</label><input id="poTo" type="date"></div><div class="field"><label>Active</label><select id="poActive"><option>Yes</option><option>No</option></select></div></div><p class="small">For Percentage, enter rates as %. For Flat, enter amounts in ₹.</p><button class="primary" onclick="savePayout()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div><div id="profileModal" class="modal"><div class="modalbox"><h3>Customer Profile / IRR Master</h3><div class="grid"><div class="field"><label>Profile</label><select id="pmProfile"><option>FTU</option><option>FTB</option><option>SRT</option><option>RTL</option><option>RTL Captive</option><option>Strategic</option><option>Strategic Captive</option></select></div><div class="field"><label>IRR %</label><input id="pmIrr" type="number" step="0.01"></div><div class="field"><label>Active</label><select id="pmActive"><option>Yes</option><option>No</option></select></div></div><button class="primary" onclick="saveProfileMaster()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
 <div id="permissionModal" class="modal"><div class="modalbox"><h3>User Permission</h3><div class="grid"><div class="field"><label>Role</label><input id="permRole" placeholder="Admin / Manager / DSA"></div><div class="field"><label>Allowed Modules (comma separated)</label><input id="permModules"></div><div class="field"><label>Active</label><select id="permActive"><option>Yes</option><option>No</option></select></div></div><button class="primary" onclick="savePermission()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
 <div id="automationModal" class="modal"><div class="modalbox"><h3>Automation</h3><div class="grid"><div class="field"><label>Name</label><input id="autoName"></div><div class="field"><label>Trigger</label><input id="autoTrigger" placeholder="RTO pending / Policy expiring"></div><div class="field"><label>Action</label><input id="autoAction" placeholder="Create follow-up / Notify team"></div><div class="field"><label>Enabled</label><select id="autoEnabled"><option>Yes</option><option>No</option></select></div></div><button class="primary" onclick="saveAutomation()">Save</button> <button class="secondary" onclick="closeModals()">Cancel</button></div></div>
 
@@ -160,7 +167,7 @@ tranches and activity.
 let S={
  leads:[],apps:[],connectors:[],
  lenders:[{id:1,name:"Tata Capital",type:"NBFC"},{id:2,name:"Mahindra Finance",type:"NBFC"},{id:3,name:"HDB Finance",type:"NBFC"},{id:4,name:"Axis Bank",type:"Bank"},{id:5,name:"IDFC First Bank",type:"Bank"}],
- docs:[],follows:[],team:[],user:"",people:[],cibil:[],tranches:[],events:[],cases:[],buyers:[],sellers:[],vehicles:[],insurances:[],rtos:[],agreements:[],payments:[],products:[],modules:[],permissions:[],automations:[],rtoRates:[]
+ docs:[],follows:[],team:[],user:"",people:[],cibil:[],tranches:[],events:[],cases:[],buyers:[],sellers:[],vehicles:[],insurances:[],rtos:[],agreements:[],payments:[],products:[],modules:[],permissions:[],automations:[],rtoRates:[],profiles:[],payouts:[],fundFlows:[]
 };
 let activeApp=null,otpPurpose=null;
 
@@ -169,6 +176,7 @@ function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x)S={...S,.
 function money(n){return "₹"+Number(n||0).toLocaleString("en-IN")}
 function toast(t){const x=document.getElementById("toast");x.textContent=t;x.style.display="block";setTimeout(()=>x.style.display="none",1800)}
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+document.addEventListener("change",e=>{if(e.target.id==="lfinance"||e.target.id==="afinance")refreshFinanceTypeUI()});
 function startTrial(){
   const name=document.getElementById("trialName").value.trim()||"Trial User";
   S.user=name;
@@ -178,7 +186,7 @@ function startTrial(){
   document.getElementById("user").textContent=S.user;
   render();
 }
-function show(id,btn){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");heading.textContent=id==="documents"?"KYC / Documents":id==="reports"?"MIS Reports":id==="workflow"?"Application Workflow":id[0].toUpperCase()+id.slice(1);render()}
+function show(id,btn){document.querySelectorAll(".view").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");heading.textContent=id==="documents"?"KYC / Documents":id==="reports"?"MIS Reports":id==="workflow"?"Application Workflow":id==="accounting"?"Accounting / Fund Flow":id[0].toUpperCase()+id.slice(1);render()}
 function openModal(id){fillSelects();document.getElementById(id).classList.add("show")}
 function closeModals(){document.querySelectorAll(".modal").forEach(x=>x.classList.remove("show"))}
 function fillSelects(){
@@ -187,21 +195,29 @@ function fillSelects(){
  if(document.getElementById("ale"))ale.innerHTML=lopts;
  const cop=S.connectors.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
  if(document.getElementById("lcx"))lcx.innerHTML='<option value="">Direct</option>'+cop;
+ const prof=S.profiles.filter(x=>x.active!=="No").map(x=>`<option value="${esc(x.name)}">${esc(x.name)}</option>`).join("");
+ ["lprofile","aprofile"].forEach(id=>{if(document.getElementById(id))document.getElementById(id).innerHTML=prof});
+ const lenderOptions=lopts||'<option value="">Select lender</option>';
+ ["lBtLender","aBtLender","poLender"].forEach(id=>{if(document.getElementById(id))document.getElementById(id).innerHTML=lenderOptions});
  const leads=S.leads.map(x=>`<option value="${x.id}">${esc(x.id)} — ${esc(x.customer)}</option>`).join("");
  ["al","dl","fl"].forEach(id=>{if(document.getElementById(id))document.getElementById(id).innerHTML=leads});
 }
+function refreshFinanceTypeUI(){const bt=(document.getElementById("lfinance")?.value||document.getElementById("afinance")?.value||"").startsWith("BT-")||document.getElementById("lfinance")?.value==="BT Repurchase"||document.getElementById("afinance")?.value==="BT Repurchase";["leadBtBox","appBtBox"].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display=bt?"block":"none"})}
+function btLeadData(){return (lfinance.value==='BT-Refinance'||lfinance.value==='BT Repurchase')?{lenderId:+lBtLender.value||null,foreclosureAmount:Number(lBtAmount.value||0),foreclosureDate:lBtDate.value,accountName:lBtAccName.value,accountNumber:lBtAccNo.value,ifsc:lBtIfsc.value}:null}
 function addLead(){
  if(!lc.value||!lm.value||!lp.value)return toast("Customer, mobile and product required");
- S.leads.unshift({id:"SF-"+Date.now().toString().slice(-6),customer:lc.value,mobile:lm.value,product:lp.value,amount:Number(la.value||0),lender:+ll.value,connector:+lcx.value||null,status:"New",ourRate:2,connectorRate:S.connectors.find(x=>x.id==+lcx.value)?.rate||0,created:new Date().toISOString()});
- save();closeModals();toast("Lead created");render()
-}
+ const product=S.products.find(p=>p.id===lp.value), profile=lprofile.value||"FTU", bt=btLeadData();
+ S.leads.unshift({id:"SF-"+Date.now().toString().slice(-6),customer:lc.value,mobile:lm.value,product:product?.name||lp.value,productId:product?.id||lp.value,profile,financeType:lfinance.value,amount:Number(la.value||0),lender:+ll.value||null,connector:+lcx.value||null,status:"New",ourRate:2,connectorRate:S.connectors.find(x=>x.id==+lcx.value)?.rate||0,insuranceMode:lInsuranceMode.value,rtoMode:lRtoMode.value,bt:bt,created:new Date().toISOString()});
+ save();closeModals();toast("Lead created");render()}
+
 function addApp(){
  if(!al.value)return toast("Select a lead");
- const id="APP-"+Date.now().toString().slice(-6);
- S.apps.unshift({id,lead:al.value,no:an.value||id,lender:+ale.value,sanction:Number(asa.value||0),status:"Submitted",stage:1,created:new Date().toISOString()});
- addEvent(id,"Application created");
- save();closeModals();toast("Application created");render();openWorkflow(id)
-}
+ const id="APP-"+Date.now().toString().slice(-6),lead=getLead({lead:al.value})||{},used=String(lead.product||"").toLowerCase()==="used vehicle";
+ const profile=aprofile.value||lead.profile||"FTU",profileMaster=S.profiles.find(x=>x.name===profile),finance=afinance.value||lead.financeType||"Refinance";
+ const bt=(finance==='BT-Refinance'||finance==='BT Repurchase')?{lenderId:+aBtLender.value||lead.bt?.lenderId||null,foreclosureAmount:Number(aBtAmount.value||lead.bt?.foreclosureAmount||0),foreclosureDate:aBtDate.value||lead.bt?.foreclosureDate||"",accountName:aBtAccName.value||lead.bt?.accountName||"",accountNumber:aBtAccNo.value||lead.bt?.accountNumber||"",ifsc:aBtIfsc.value||lead.bt?.ifsc||""}:null;
+ S.apps.unshift({id,lead:al.value,no:an.value||id,lender:+ale.value,sanction:Number(asa.value||0),status:used?"CIBIL Check":"Submitted",stage:1,workflowType:used?"used_vehicle":"loan",profile,irrFrozen:profileMaster?.irr??null,financeType:finance,insuranceMode:ainsuranceMode.value||lead.insuranceMode||"Inhouse",rtoMode:artoMode.value||lead.rtoMode||"Inhouse",bt,created:new Date().toISOString()});
+ if(used)lead.status="CIBIL Check"; addEvent(id,used?"Used Vehicle workflow started at CIBIL Check":"Application created");save();closeModals();toast(used?"Used Vehicle application created — CIBIL Check pending":"Application created");render();openWorkflow(id)}
+
 function addConnector(){if(!cn.value)return toast("Name required");S.connectors.push({id:Date.now(),name:cn.value,mobile:cm.value,rate:Number(cr.value||0)});save();closeModals();toast("Connector added");render()}
 function addLender(){if(!ln.value)return toast("Name required");S.lenders.push({id:Date.now(),name:ln.value,type:lt.value});save();closeModals();toast("Lender added");render()}
 function addDoc(){if(!dl.value)return toast("Select a lead");S.docs.unshift({lead:dl.value,doc:dd.value,status:ds.value,date:new Date().toLocaleDateString("en-IN")});save();closeModals();toast("Document record saved");render()}
@@ -212,21 +228,44 @@ function connector(id){return S.connectors.find(x=>x.id==id)?.name||"Direct"}
 function addEvent(appId,text){S.events.unshift({appId,text,date:new Date().toLocaleString("en-IN")})}
 function getApp(id){return S.apps.find(x=>x.id===id)}
 function getLead(a){return S.leads.find(x=>x.id===a?.lead)}
-const stages=["Application","Applicants","KYC","CIBIL","Lender Login","Processing","Sanction","Legal & Agreement","Applicant OTP","Seller OTP","Disbursement","Completed"];
-
+const DEFAULT_LOAN_STAGES=["Application","Applicants","KYC","CIBIL","Lender Login","Processing","Sanction","Legal & Agreement","Applicant OTP","Seller OTP","Disbursement","Completed"];
+const USED_VEHICLE_STAGES=["CIBIL Check","Lender Login","Documents Incomplete","Documents Complete","Login","Valuation Done","FI Done","Credit Decision Pending","Approval","Buyer/Seller Agreement","RTO & Insurance Clearance","Disbursement in Tranches","PDD Updated / Received"];
+const stages=DEFAULT_LOAN_STAGES;
+function isUsedVehicleApp(a){const l=getLead(a);return String(l?.product||"").trim().toLowerCase()==="used vehicle" || a?.workflowType==="used_vehicle"}
+function workflowStages(a){return isUsedVehicleApp(a)?USED_VEHICLE_STAGES:DEFAULT_LOAN_STAGES}
+function canAdvanceUsedVehicle(a,n){
+ const c=S.cibil.find(x=>x.appId===a.id);
+ if(n===2 && c?.decision!=="OK") return "CIBIL must be marked OK before Lender Login.";
+ if(n===10){const ag=S.agreements.find(x=>x.caseId===a.caseId||x.appId===a.id);if(!ag || ag.status!=="Signed") return "Buyer/Seller Agreement must be Signed before moving ahead."}
+ if(n===11){const ag=S.agreements.find(x=>x.caseId===a.caseId||x.appId===a.id);if(ag && ag.status!=="Signed") return "Buyer/Seller Agreement must be Signed before RTO & Insurance clearance."}
+ if(n===12){const r=S.rtos.find(x=>x.caseId===a.caseId && x.payment==="Paid");const i=S.insurances.find(x=>x.caseId===a.caseId && x.status==="Paid");if(!r || !i)return "RTO charges and Insurance must both be recorded as Paid before disbursement."}
+ if(n===13 && !S.tranches.some(x=>x.appId===a.id&&x.status==="Released")) return "Release at least one disbursement tranche before PDD.";
+ return "";
+}
 function setStage(id,n){
- const a=getApp(id);if(!a)return;
- if(n>=11 && !(a.applicantOtp && a.sellerOtp))return toast("Complete Applicant + Seller OTP verification before disbursement");
- a.stage=Math.max(1,Math.min(stages.length,n));a.status=stages[a.stage-1];
- const l=getLead(a);if(l&&a.stage>=7&&a.stage<11)l.status="Sanctioned";
- if(l&&a.stage>=11)l.status="Disbursed";
- addEvent(id,"Moved to "+stages[a.stage-1]);save();render();openWorkflow(id)
+ const a=getApp(id);if(!a)return;const ws=workflowStages(a);
+ if(isUsedVehicleApp(a)){
+   if(n!==a.stage+1 && n!==a.stage)return toast("Please complete the workflow step by step.");
+   const problem=canAdvanceUsedVehicle(a,n);if(problem)return toast(problem);
+ }
+ if(!isUsedVehicleApp(a) && n>=11 && !(a.applicantOtp && a.sellerOtp))return toast("Complete Applicant + Seller OTP verification before disbursement");
+ a.stage=Math.max(1,Math.min(ws.length,n));a.status=ws[a.stage-1];
+ const l=getLead(a);
+ if(l&&isUsedVehicleApp(a)){if(a.stage===1)l.status="CIBIL Check";else if(a.stage===2)l.status="CIBIL OK";else if(a.stage>=9&&a.stage<12)l.status="Approved";else if(a.stage===12)l.status="Disbursement";else if(a.stage===13)l.status="PDD Received"}
+ else {if(l&&a.stage>=7&&a.stage<11)l.status="Sanctioned";if(l&&a.stage>=11)l.status="Disbursed";}
+ addEvent(id,"Moved to "+ws[a.stage-1]);save();render();openWorkflow(id)
 }
 function addPerson(){if(!pn.value)return toast("Name required");if(!activeApp)return;
  S.people.push({id:Date.now(),appId:activeApp,role:pr.value,name:pn.value,mobile:pm.value,pan:pp.value});
  addEvent(activeApp,pr.value+" added: "+pn.value);save();closeModals();toast("Person added");openWorkflow(activeApp)
 }
-function saveCibil(){if(!activeApp)return;S.cibil=S.cibil.filter(x=>x.appId!==activeApp);S.cibil.push({appId:activeApp,score:Number(cs.value||0),status:cst.value,remarks:crm.value,date:new Date().toLocaleDateString("en-IN")});addEvent(activeApp,"CIBIL updated");save();closeModals();toast("CIBIL saved");openWorkflow(activeApp)}
+function saveCibil(){
+ if(!activeApp)return;const a=getApp(activeApp);const used=isUsedVehicleApp(a);S.cibil=S.cibil.filter(x=>x.appId!==activeApp);
+ const rec={appId:activeApp,score:Number(cs.value||0),status:cst.value,decision:cdec?.value||"Pending",remarks:crm.value,date:new Date().toLocaleDateString("en-IN")};S.cibil.push(rec);addEvent(activeApp,"CIBIL updated: "+rec.decision);
+ if(used&&rec.decision==="OK"){a.stage=2;a.status=USED_VEHICLE_STAGES[1];const l=getLead(a);if(l)l.status="CIBIL OK";addEvent(activeApp,"CIBIL OK — moved to Lender Login");}
+ if(used&&rec.decision==="Not OK"){a.status="CIBIL Rejected";const l=getLead(a);if(l)l.status="Rejected";addEvent(activeApp,"CIBIL Not OK — application stopped");}
+ save();closeModals();toast(used?(rec.decision==="OK"?"CIBIL OK — Lender Login unlocked":"CIBIL marked Not OK"):"CIBIL saved");render();openWorkflow(activeApp)
+}
 function startOtp(purpose){
  if(!activeApp)return;otpPurpose=purpose;document.getElementById("otpTitle").textContent=purpose+" OTP Verification";document.getElementById("demoOtp").textContent="123456";otpInput.value="";openModal("otpModal")
 }
@@ -253,38 +292,11 @@ function releaseTranche(appId,no){
 function statusChange(id){const x=S.leads.find(a=>a.id===id);const n=prompt("Enter status: New / Submitted / Sanctioned / Disbursed / Rejected",x.status);if(n){x.status=n;save();render();toast("Status updated")}}
 
 function openWorkflow(id){
- activeApp=id;const a=getApp(id);if(!a)return;show("workflow",document.querySelectorAll(".nav")[4]);
- const l=getLead(a)||{};const people=S.people.filter(x=>x.appId===id);const c=S.cibil.find(x=>x.appId===id);const ts=S.tranches.filter(x=>x.appId===id).sort((x,y)=>x.no-y.no);
- const events=S.events.filter(x=>x.appId===id).slice(0,10);
- const completed=i=>a.stage>i;
- workflowContent.innerHTML=`
- <div><b>${esc(a.no)}</b> • ${esc(l.customer||a.lead)} • ${esc(lender(a.lender))} • Requested ${money(l.amount)} • Sanction ${money(a.sanction)}</div>
- <div class="stagebar">${stages.map((s,i)=>`<div class="stage ${completed(i+1)?"done":a.stage===i+1?"current":""}">${i+1}. ${s}</div>`).join("")}</div>
- <div class="grid">
-  <div class="panel"><h4>Applicants</h4>${people.length?people.map(p=>`<div><b>${esc(p.role)}</b>: ${esc(p.name)}<br><span class="small">${esc(p.mobile||"")} ${p.pan?"• PAN "+esc(p.pan):""}</span></div>`).join(""):"<span class='empty'>None added</span>"}
-  <div class="workflow-actions"><button class="secondary" onclick="openModal('personModal')">+ Add Person</button></div></div>
-  <div class="panel"><h4>KYC / Documents</h4><div>${S.docs.filter(d=>d.lead===a.lead).map(d=>`<span class="badge">${esc(d.doc)}: ${esc(d.status)}</span> `).join("")||"No records"}</div><div class="workflow-actions"><button class="secondary" onclick="openModal('docModal')">+ Add Document</button></div></div>
-  <div class="panel"><h4>CIBIL</h4>${c?`<b>${c.score}</b> • ${esc(c.status)}<br><span class="small">${esc(c.remarks||"")}</span>`:"Not recorded"}<div class="workflow-actions"><button class="secondary" onclick="openModal('cibilModal')">Update CIBIL</button></div></div>
- </div>
- <div class="panel"><h4>Stage Actions</h4>
-  <div class="workflow-actions">
-   <button class="secondary" onclick="setStage('${id}',4)">CIBIL / Review</button>
-   <button class="secondary" onclick="setStage('${id}',5)">Lender Login</button>
-   <button class="secondary" onclick="setStage('${id}',6)">Processing</button>
-   <button class="secondary" onclick="setStage('${id}',7)">Sanction</button>
-   <button class="secondary" onclick="setStage('${id}',8)">Legal</button>
-   <button class="secondary" onclick="startOtp('Applicant')">Applicant OTP</button>
-   <button class="secondary" onclick="startOtp('Seller')">Seller OTP</button>
-  </div>
- </div>
- <div class="panel"><h4>Disbursement Tranches</h4>
-  ${[1,2,3,4].map(n=>{const t=ts.find(x=>x.no===n);return `<div class="tranche"><b>Tranche ${n}</b> — ${t?money(t.amount):"Not planned"} ${t?`• ${esc(t.status)} • ${esc(t.date)}`:""} ${t&&t.status!=="Released"?`<button class="secondary" onclick="releaseTranche('${id}',${n})">Release</button>`:""} </div>`}).join("")}
-  <button class="primary" onclick="openModal('trancheModal')" ${a.applicantOtp&&a.sellerOtp?"":"disabled"}>+ Add Tranche</button>
- </div>
- <div class="panel"><h4>Activity</h4><div class="timeline">${events.map(e=>`<div><b>${esc(e.text)}</b><br><span class="small">${esc(e.date)}</span></div>`).join("")||"No activity yet"}</div></div>
- `;
+ activeApp=id;const a=getApp(id);if(!a)return;const wfBtn=[...document.querySelectorAll('.nav')].find(x=>x.getAttribute('onclick')?.includes("show('workflow'"));show("workflow",wfBtn);
+ const ws=workflowStages(a),l=getLead(a)||{},people=S.people.filter(x=>x.appId===id),c=S.cibil.find(x=>x.appId===id),ts=S.tranches.filter(x=>x.appId===id).sort((x,y)=>x.no-y.no),events=S.events.filter(x=>x.appId===id).slice(0,10),used=isUsedVehicleApp(a),completed=i=>a.stage>i;let actionHtml="";
+ if(used){const next=a.stage+1,labels={2:"CIBIL OK → Lender Login",3:"Documents Incomplete",4:"Documents Complete",5:"Login Completed",6:"Valuation Done",7:"FI Done",8:"Credit Decision Pending",9:"Approval",10:"Buyer/Seller Agreement Signed",11:"RTO & Insurance Cleared",12:"Open Disbursement Tranches",13:"PDD Updated / Received"};if(a.status!=="CIBIL Rejected"&&next<=ws.length)actionHtml=`<button class="primary" onclick="setStage('${id}',${next})">${labels[next]||ws[next-1]}</button>`;if(a.stage===12)actionHtml+=` <button class="secondary" onclick="openModal('trancheModal')">+ Add Tranche</button>`;if(a.stage>=11){if(a.rtoMode==="Inhouse")actionHtml+=` <button class="secondary" onclick="openModal('rtoModal')">RTO</button>`;if(a.insuranceMode==="Inhouse")actionHtml+=` <button class="secondary" onclick="openModal('insuranceModal')">Insurance</button>`;}if(a.stage>=9)actionHtml+=` <button class="secondary" onclick="openModal('agreementModal')">Agreement</button>`;}else{actionHtml=`<button class="secondary" onclick="setStage('${id}',4)">CIBIL / Review</button><button class="secondary" onclick="setStage('${id}',5)">Lender Login</button><button class="secondary" onclick="setStage('${id}',6)">Processing</button><button class="secondary" onclick="setStage('${id}',7)">Sanction</button><button class="secondary" onclick="setStage('${id}',8)">Legal</button><button class="secondary" onclick="startOtp('Applicant')">Applicant OTP</button><button class="secondary" onclick="startOtp('Seller')">Seller OTP</button>`;}
+ workflowContent.innerHTML=`<div><b>${esc(a.no)}</b> • ${esc(l.customer||a.lead)} • ${esc(l.product||"")} • ${esc(lender(a.lender))} • Requested ${money(l.amount)} ${used?"• <span class='badge'>Used Vehicle Workflow</span>":""}</div>${used?`<div class="panel" style="background:#f7faff"><b>Used Vehicle Process</b><div class="small" style="margin-top:5px">New Lead → CIBIL Check → CIBIL OK → Lender Login → Documents Incomplete/Complete → Login → Valuation Done → FI Done → Credit Decision Pending → Approval → Buyer/Seller Agreement → RTO & Insurance → Disbursement in Tranches → PDD Updated/Received</div></div>`:""}${used?`<div class="panel" style="background:#fffdf5"><b>Application Controls</b><div class="grid" style="margin-top:8px"><div><span class="small">Customer Profile</span><br><b>${esc(a.profile||"-")}</b></div><div><span class="small">Frozen IRR</span><br><b>${a.irrFrozen==null?"-":esc(a.irrFrozen)+"%"}</b></div><div><span class="small">Insurance</span><br><b>${esc(a.insuranceMode||"Inhouse")}</b></div><div><span class="small">RTO</span><br><b>${esc(a.rtoMode||"Inhouse")}</b></div></div>${(a.insuranceMode==="Inhouse"||a.rtoMode==="Inhouse")?`<div class="workflow-actions">${a.insuranceMode==="Inhouse"?`<button class="secondary" onclick="openModal('insuranceModal')">Insurance & Charges</button>`:""}${a.rtoMode==="Inhouse"?`<button class="secondary" onclick="openModal('rtoModal')">RTO & Charges</button>`:""}</div>`:""}</div>`:""}<div class="stagebar">${ws.map((s,i)=>`<div class="stage ${completed(i+1)?"done":a.stage===i+1?"current":""}">${i+1}. ${s}</div>`).join("")}</div><div class="grid"><div class="panel"><h4>Applicants</h4>${people.length?people.map(p=>`<div><b>${esc(p.role)}</b>: ${esc(p.name)}<br><span class="small">${esc(p.mobile||"")} ${p.pan?"• PAN "+esc(p.pan):""}</span></div>`).join(""):"<span class='empty'>None added</span>"}<div class="workflow-actions"><button class="secondary" onclick="openModal('personModal')">+ Add Person</button></div></div><div class="panel"><h4>KYC / Documents</h4><div>${S.docs.filter(d=>d.lead===a.lead).map(d=>`<span class="badge">${esc(d.doc)}: ${esc(d.status)}</span> `).join("")||"No records"}</div><div class="workflow-actions"><button class="secondary" onclick="openModal('docModal')">+ Add Document</button></div></div><div class="panel"><h4>CIBIL</h4>${c?`<b>${c.score}</b> • ${esc(c.status)} • <b>${esc(c.decision||"Pending")}</b><br><span class="small">${esc(c.remarks||"")}</span>`:"Not recorded"}<div class="workflow-actions"><button class="secondary" onclick="openModal('cibilModal')">Update CIBIL</button></div></div></div><div class="panel"><h4>${used?"Next Process Step":"Stage Actions"}</h4><div class="workflow-actions">${actionHtml}</div>${used&&a.stage===1?`<div class="small" style="margin-top:8px">Run the CIBIL check and mark the decision <b>OK</b>. Only then will Lender Login become available.</div>`:""}${used&&a.stage===11?`<div class="small" style="margin-top:8px">Disbursement is blocked until both RTO charges and Insurance are recorded as Paid.</div>`:""}</div><div class="panel"><h4>Disbursement Tranches</h4>${ts.length?ts.map(t=>`<div class="tranche"><b>Tranche ${t.no}</b> • ${money(t.amount)} • ${esc(t.date)} • <span class="badge">${esc(t.status)}</span> ${t.status!=="Released"?`<button class="secondary" onclick="releaseTranche('${id}',${t.no})">Release</button>`:""}</div>`).join(""):"<span class='empty'>No tranches</span>"}</div><div class="panel"><h4>Activity</h4><div class="timeline">${events.map(e=>`<div><b>${esc(e.text)}</b><br><span class="small">${esc(e.date)}</span></div>`).join("")||"No activity"}</div></div>`;
 }
-
 function render(){
  load();
  const q=(document.getElementById("searchLead")?.value||"").toLowerCase();
@@ -293,7 +305,7 @@ function render(){
 
  const aq=(document.getElementById("searchApp")?.value||"").toLowerCase();
  const apps=S.apps.filter(a=>{const l=getLead(a)||{};return !aq||(a.no+l.customer+l.mobile).toLowerCase().includes(aq)});
- appRows.innerHTML=apps.length?apps.map(a=>{let l=getLead(a);let tr=S.tranches.filter(x=>x.appId===a.id&&x.status==="Released").length;return `<tr><td>${esc(a.no)}</td><td>${esc(l?.customer||a.lead)}</td><td>${esc(lender(a.lender))}</td><td>${money(a.sanction||l?.amount)}</td><td><span class="badge">${esc(stages[(a.stage||1)-1])}</span></td><td>${tr}/4</td><td><button class="secondary" onclick="openWorkflow('${a.id}')">Open</button></td></tr>`}).join(""):'<tr><td colspan="7" class="empty">No applications</td></tr>';
+ appRows.innerHTML=apps.length?apps.map(a=>{let l=getLead(a);let tr=S.tranches.filter(x=>x.appId===a.id&&x.status==="Released").length;return `<tr><td>${esc(a.no)}</td><td>${esc(l?.customer||a.lead)}</td><td>${esc(lender(a.lender))}</td><td>${money(a.sanction||l?.amount)}</td><td><span class="badge">${esc(workflowStages(a)[(a.stage||1)-1])}</span></td><td>${tr}/4</td><td><button class="secondary" onclick="openWorkflow('${a.id}')">Open</button></td></tr>`}).join(""):'<tr><td colspan="7" class="empty">No applications</td></tr>';
 
 connectorRows.innerHTML=S.connectors.length?S.connectors.map(c=>{const ls=S.leads.filter(x=>x.connector===c.id);return `<tr><td>${esc(c.name)}</td><td>${esc(c.mobile||"")}</td><td>${ls.length}</td></tr>`;}).join(""):"";
  lenderRows.innerHTML=S.lenders.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.type)}</td><td><span class="badge">Active</span></td></tr>`).join("");
@@ -371,7 +383,7 @@ function exportCompleteCSV(){
           l.connectorRate||0,
           l.created,
           a.no,
-          stages[(a.stage||1)-1]||"",
+          workflowStages(a)[(a.stage||1)-1]||"",
           a.status||"",
           a.applicantOtp?"Verified":"Pending",
           a.sellerOtp?"Verified":"Pending",
@@ -489,7 +501,7 @@ function downloadCompleteMIS(){
       "Lender":lender(a.lender),
       "Requested Amount":Number(l.amount||0),
       "Sanction Amount":Number(a.sanction||0),
-      "Stage":stages[(a.stage||1)-1]||"",
+      "Stage":workflowStages(a)[(a.stage||1)-1]||"",
       "Status":a.status||"",
       "Applicant OTP":a.applicantOtp?"Verified":"Pending",
       "Seller OTP":a.sellerOtp?"Verified":"Pending",
@@ -505,7 +517,7 @@ function downloadCompleteMIS(){
     return {
       "Application No":a.no,
       "Customer":l.customer||"",
-      "Current Stage":stages[(a.stage||1)-1]||"",
+      "Current Stage":workflowStages(a)[(a.stage||1)-1]||"",
       "Stage Number":a.stage||1,
       "Status":a.status||"",
       "Application":"Completed",
@@ -697,6 +709,7 @@ function downloadCompleteMIS(){
   addSheet("Buyers",S.buyers);
   addSheet("Sellers",S.sellers);
   addSheet("Used Vehicles",S.vehicles);
+  addSheet("Customer Profile IRR Master",S.profiles);
   addSheet("Insurance",S.insurances);
   addSheet("RTO Charges",S.rtos);
   addSheet("RTO Rate Master",S.rtoRates);
@@ -864,11 +877,13 @@ const DEFAULT_PRODUCTS=[
 const DEFAULT_RTO=[
  ["CAR 5 Seater","TA + HPA",7000,9000,"₹1,000 extra note"],["CAR 5 Seater","TA + HPA + HPT",7500,9500,""],["CAR 7 Seater","TA + HPA",7500,9500,""],["CAR 7 Seater","TA + HPA + HPT",8000,10000,""],["CV PICKUP","TA + HPA",7500,9500,""],["CV PICKUP","TA + HPT + HPA",8500,10500,""],["CV PICKUP","Permit",6000,7500,""],["CV PICKUP","Fitness",5500,6500,"Rates may be ₹6,500 / ₹7,500"],["MHCV","TA + HPA + HPT",10000,12500,"₹2,000 extra note"],["MHCV","NP + VLTD",6000,0,""],["MHCV","PT (Permit Trans.)",8000,0,""],["MHCV","Trans. + HPA",8500,10500,""],["MHCV","Only Financer Name Change",7500,null,"Not Present not applicable"]
 ];
+const DEFAULT_PROFILES=[{name:"FTU",irr:18},{name:"FTB",irr:18},{name:"SRT",irr:18},{name:"RTL",irr:18},{name:"RTL Captive",irr:18},{name:"Strategic",irr:18},{name:"Strategic Captive",irr:18}];
 function initMasters(){
  if(!Array.isArray(S.modules)||!S.modules.length) S.modules=DEFAULT_MODULES.map((name,i)=>({id:"M"+(i+1),name}));
  if(!Array.isArray(S.products)||!S.products.length) S.products=DEFAULT_PRODUCTS.map(x=>({...x,modules:[...x.modules]}));
+ if(!Array.isArray(S.profiles)||!S.profiles.length) S.profiles=DEFAULT_PROFILES.map(x=>({...x,active:"Yes"}));
  if(!Array.isArray(S.rtoRates)||!S.rtoRates.length) S.rtoRates=DEFAULT_RTO.map((r,i)=>({id:i+1,vehicle:r[0],service:r[1],present:r[2],absent:r[3],note:r[4]}));
- ["cases","buyers","sellers","vehicles","insurances","rtos","agreements","payments","permissions","automations"].forEach(k=>{if(!Array.isArray(S[k]))S[k]=[]});
+ ["cases","buyers","sellers","vehicles","insurances","rtos","agreements","payments","permissions","automations","payouts","fundFlows"].forEach(k=>{if(!Array.isArray(S[k]))S[k]=[]});
  save();
 }
 function caseOpts(){return S.cases.map(c=>`<option value="${esc(c.id)}">${esc(c.id)} — ${esc(c.customer)}</option>`).join("")}
@@ -878,6 +893,9 @@ function createBusinessCase(){const product=document.getElementById("caseProduct
 function saveBuyer(){if(!buyName.value)return;S.buyers.push({caseId:buyCase.value,name:buyName.value,mobile:buyMobile.value,pan:buyPan.value,address:buyAddress.value});save();closeModals();render()}
 function saveSeller(){if(!sellName.value)return;S.sellers.push({caseId:sellCase.value,name:sellName.value,mobile:sellMobile.value,pan:sellPan.value,address:sellAddress.value});save();closeModals();render()}
 function saveVehicle(){if(!vehReg.value)return;S.vehicles.push({caseId:vehCase.value,reg:vehReg.value,type:vehType.value,model:vehModel.value,year:vehYear.value,seller:vehSeller.value,value:Number(vehValue.value||0)});save();closeModals();render()}
+function refreshProfileIRR(){const p=S.profiles.find(x=>x.name===document.getElementById("aprofile")?.value&&x.active!=="No");if(document.getElementById("airr"))document.getElementById("airr").value=p?p.irr+"%":"-";}
+function refreshInhouseOptions(){const i=document.getElementById("ainsuranceMode")?.value==="Inhouse",r=document.getElementById("artoMode")?.value==="Inhouse",box=document.getElementById("inhouseOptions"),tabs=document.getElementById("inhouseTabs");if(!box||!tabs)return;box.style.display=(i||r)?"block":"none";let h="";if(i)h+='<button type="button" class="subtab active" onclick="openModal(\'insuranceModal\')">Insurance & Charges</button>';if(r)h+='<button type="button" class="subtab active" onclick="openModal(\'rtoModal\')">RTO & Charges</button>';tabs.innerHTML=h;}
+function saveProfileMaster(){const name=pmProfile.value,irr=Number(pmIrr.value||0),active=pmActive.value;if(!name)return;const old=S.profiles.find(x=>x.name===name);if(old){old.irr=irr;old.active=active}else S.profiles.push({name,irr,active});save();closeModals();render();}
 function saveInsurance(){if(!insCompany.value)return;const premium=Number(insPremium.value||0),gst=Number(insGst.value||0);S.insurances.push({caseId:insCase.value,vehicle:insVehicle.value,type:insType.value,company:insCompany.value,policy:insPolicy.value,start:insStart.value,expiry:insExpiry.value,idv:Number(insIdv.value||0),premium,gst,total:premium+gst,status:insStatus.value,remarks:insRemarks.value});save();closeModals();render()}
 function refreshRtoRate(){const v=rtoVehicle.value,svc=rtoService.value,p=S.rtoRates.find(x=>x.vehicle===v&&x.service===svc);const rate=p?(rtoPresence.value==="Present"?p.present:p.absent):0;rtoBase.value=rate==null?"N/A":money(rate);rtoTotal.value=rate==null?"N/A":money(Number(rate)+Number(rtoAdditional.value||0))}
 function loadRtoServices(){const e=document.getElementById("rtoService");if(!e)return;const arr=S.rtoRates.filter(x=>x.vehicle===rtoVehicle.value);e.innerHTML=arr.map(x=>`<option>${esc(x.service)}</option>`).join("");refreshRtoRate()}
@@ -889,9 +907,14 @@ function saveModule(){const name=modName.value.trim();if(!name)return;S.modules.
 function saveRtoRate(){const row={id:Date.now(),vehicle:rrVehicle.value,service:rrService.value.trim(),present:Number(rrPresent.value||0),absent:rrAbsent.value===""?null:Number(rrAbsent.value),note:rrNote.value};if(!row.service)return;const i=S.rtoRates.findIndex(x=>x.vehicle===row.vehicle&&x.service===row.service);if(i>=0)S.rtoRates[i]=row;else S.rtoRates.push(row);save();closeModals();render()}
 function savePermission(){S.permissions.push({role:permRole.value,modules:permModules.value,active:permActive.value});save();closeModals();render()}
 function saveAutomation(){S.automations.push({name:autoName.value,trigger:autoTrigger.value,action:autoAction.value,enabled:autoEnabled.value});save();closeModals();render()}
+function savePayout(){if(!poLender.value)return toast("Select lender");S.payouts.push({id:Date.now(),lenderId:+poLender.value,segment:poSegment.value,type:poType.value,gross:Number(poGross.value||0),connector:Number(poConnector.value||0),sub:Number(poSub.value||0),from:poFrom.value,to:poTo.value,active:poActive.value});save();closeModals();toast("Payout structure saved");render()}
+function caseForApp(a){return S.cases.find(c=>c.appId===a.id)||S.cases.find(c=>c.id===a.caseId)}
+function renderAccountingCase(){const id=document.getElementById("acctCase")?.value,e=document.getElementById("acctBox");if(!e)return;const c=S.cases.find(x=>x.id===id),payments=S.payments.filter(x=>x.caseId===id),ff=S.fundFlows.filter(x=>x.caseId===id);if(!c){e.innerHTML='<div class="empty">Select or create a case.</div>';return}const bt=ff.filter(x=>x.category==='BT').reduce((s,x)=>s+Number(x.amount||0),0),rto=ff.filter(x=>x.category==='RTO').reduce((s,x)=>s+Number(x.amount||0),0),ins=ff.filter(x=>x.category==='Insurance').reduce((s,x)=>s+Number(x.amount||0),0),other=ff.filter(x=>!['BT','RTO','Insurance'].includes(x.category)).reduce((s,x)=>s+Number(x.amount||0),0),total=bt+rto+ins+other,paid=payments.filter(x=>x.status==='Paid').reduce((s,x)=>s+Number(x.amount||0),0);e.innerHTML=`<div class="grid"><div class="card"><div class="label">BT / Takeover</div><div class="num">${money(bt)}</div></div><div class="card"><div class="label">RTO</div><div class="num">${money(rto)}</div></div><div class="card"><div class="label">Insurance</div><div class="num">${money(ins)}</div></div><div class="card"><div class="label">Total Fund Requirement</div><div class="num">${money(total)}</div></div><div class="card"><div class="label">Paid / Transferred</div><div class="num">${money(paid)}</div></div><div class="card"><div class="label">Balance</div><div class="num">${money(total-paid)}</div></div></div><div class="panel"><h4>Add Case Fund-Flow Item</h4><div class="grid"><div class="field"><label>Category</label><select id="ffCat"><option>BT</option><option>RTO</option><option>Insurance</option><option>Agreement</option><option>Finance/Lender</option><option>Other Charges</option><option>Commission</option></select></div><div class="field"><label>Payee</label><input id="ffPayee"></div><div class="field"><label>Amount</label><input id="ffAmount" type="number"></div><div class="field"><label>Transfer Status</label><select id="ffStatus"><option>Pending</option><option>Paid</option><option>Part Paid</option></select></div><div class="field"><label>Account Name</label><input id="ffAccName"></div><div class="field"><label>Account Number</label><input id="ffAccNo"></div><div class="field"><label>IFSC</label><input id="ffIfsc"></div></div><button class="primary" onclick="saveFundFlow('${esc(id)}')">Add</button></div><div class="tablewrap"><table><thead><tr><th>Category</th><th>Payee</th><th>Amount</th><th>Status</th><th>Account</th><th>IFSC</th></tr></thead><tbody>${ff.map(x=>`<tr><td>${esc(x.category)}</td><td>${esc(x.payee)}</td><td>${money(x.amount)}</td><td>${esc(x.status)}</td><td>${esc(x.accountName||'')} / ${esc(x.accountNumber||'')}</td><td>${esc(x.ifsc||'')}</td></tr>`).join('')||'<tr><td colspan="6" class="empty">No fund-flow items</td></tr>'}</tbody></table></div>`}
+function saveFundFlow(caseId){S.fundFlows.push({caseId,category:ffCat.value,payee:ffPayee.value,amount:Number(ffAmount.value||0),status:ffStatus.value,accountName:ffAccName.value,accountNumber:ffAccNo.value,ifsc:ffIfsc.value,date:new Date().toISOString()});save();toast("Fund-flow item saved");renderAccountingCase()}
 function renderNewModules(){
  initMasters();
- const cp=document.getElementById("caseProduct");if(cp){cp.innerHTML=S.products.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("");renderCaseModules()}
+ const ap=document.getElementById("aprofile");if(ap){ap.innerHTML=S.profiles.filter(x=>x.active!=="No").map(x=>`<option value="${esc(x.name)}">${esc(x.name)}</option>`).join("");refreshProfileIRR();refreshInhouseOptions()}
+ const cp=document.getElementById("caseProduct");if(cp){cp.innerHTML=S.products.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("");renderCaseModules()} const lpEl=document.getElementById("lp");if(lpEl){lpEl.innerHTML=S.products.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("")}
  fillBusinessSelects();
  const rows=(S.cases||[]).map(c=>{const p=S.products.find(x=>x.id===c.product);return `<tr><td>${esc(c.id)}</td><td>${esc(c.customer)}</td><td>${esc(p?.name||c.product)}</td><td>${esc((p?.modules||[]).join(", "))}</td><td>${esc(c.status)}</td></tr>`}).join("");if(document.getElementById("caseRows"))caseRows.innerHTML=rows;
  const br=S.buyers.map(x=>`<tr><td>${esc(x.caseId)}</td><td>${esc(x.name)}</td><td>${esc(x.mobile)}</td><td>${esc(x.pan)}</td><td>${esc(x.address)}</td></tr>`).join("");if(document.getElementById("buyerRows"))buyerRows.innerHTML=br;
@@ -901,6 +924,9 @@ function renderNewModules(){
  const rr=S.rtos.map(x=>`<tr><td>${esc(x.caseId)}</td><td>${esc(x.vehicleType)}</td><td>${esc(x.service)}</td><td>${esc(x.presence)}</td><td>${money(x.base)}</td><td>${money(x.additional)}</td><td>${money(x.total)}</td><td>${esc(x.payment)}</td></tr>`).join("");if(document.getElementById("rtoRows"))rtoRows.innerHTML=rr;
  const ar=S.agreements.map(x=>`<tr><td>${esc(x.caseId)}</td><td>${esc(x.type)}</td><td>${esc(x.buyer)}</td><td>${esc(x.seller)}</td><td>${esc(x.status)}</td><td>${esc(x.applicantOtp)}</td><td>${esc(x.sellerOtp)}</td><td>${esc(x.date)}</td></tr>`).join("");if(document.getElementById("agreementRows"))agreementRows.innerHTML=ar;
  const pr=S.payments.map(x=>`<tr><td>${esc(x.caseId)}</td><td>${esc(x.category)}</td><td>${esc(x.party)}</td><td>${money(x.amount)}</td><td>${esc(x.mode)}</td><td>${esc(x.date)}</td><td>${esc(x.status)}</td><td>${esc(x.remarks)}</td></tr>`).join("");if(document.getElementById("paymentRows"))paymentRows.innerHTML=pr;
+ if(document.getElementById("acctCase")){acctCase.innerHTML=caseOpts()||'<option value="">Create a case first</option>';if(!acctCase.value&&S.cases[0])acctCase.value=S.cases[0].id;renderAccountingCase()}
+ if(document.getElementById("payoutRows"))payoutRows.innerHTML=S.payouts.map(x=>`<tr><td>${esc(lender(x.lenderId))}</td><td>${esc(x.segment)}</td><td>${esc(x.type)}</td><td>${x.type==='Percentage'?esc(x.gross)+'%':money(x.gross)}</td><td>${x.type==='Percentage'?esc(x.connector)+'%':money(x.connector)}</td><td>${x.type==='Percentage'?esc(x.sub)+'%':money(x.sub)}</td><td>${esc(x.from||'')} → ${esc(x.to||'Open')}</td></tr>`).join('')||'<tr><td colspan="7" class="empty">No payout structures</td></tr>';
+ if(document.getElementById("profileRows"))profileRows.innerHTML=S.profiles.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.irr)}%</td><td>${esc(x.active||"Yes")}</td></tr>`).join("");
  if(document.getElementById("productMasterTable"))productMasterTable.innerHTML='<div class="tablewrap"><table><thead><tr><th>Product</th><th>Product ID</th><th>Enabled Modules</th></tr></thead><tbody>'+S.products.map(p=>`<tr><td>${esc(p.name)}</td><td>${esc(p.id)}</td><td>${p.modules.map(m=>`<button class="secondary" style="margin:2px" onclick="toggleProductModule('${esc(p.id)}','${esc(m)}')">${esc(m)} ✓</button>`).join("")}</td></tr>`).join("")+'</tbody></table></div>';
  if(document.getElementById("rtoRateRows"))rtoRateRows.innerHTML=S.rtoRates.map(x=>`<tr><td>${esc(x.vehicle)}</td><td>${esc(x.service)}</td><td>${x.present==null?'—':money(x.present)}</td><td>${x.absent==null?'—':money(x.absent)}</td><td>${esc(x.note)}</td></tr>`).join("");
  if(document.getElementById("permissionRows"))permissionRows.innerHTML=S.permissions.map(x=>`<tr><td>${esc(x.role)}</td><td>${esc(x.modules)}</td><td>${esc(x.active)}</td></tr>`).join("");
